@@ -3,7 +3,6 @@ import sys
 import pandas as pd
 import seaborn as sns
 from matplotlib import pyplot as plt
-# %matplotlib inline
 import plotly.express as px
 import plotly.graph_objects as go
 import plotly.io as pio
@@ -50,6 +49,7 @@ while True:
 
 posThreshold = float(input('\nEnter the -log10(p) threshold for the positive corelation in the visualization:\n'))
 negThreshold = float(input('\nEnter the -log10(p) threshold for the negative corelation in the visualization:\n'))
+annotationVar = input('\nEnter the name of the column you would like to use for annotation of significant points:\n')
 show_legendInput = input('\nWould you like a legend to be included in your visualization (yes/no)? You can see what the legend looks like here.\n')
 show_legend = True
 
@@ -61,11 +61,14 @@ df['y'] = df[df[y_axis].isna() == False][y_axis].apply(lambda x: -math.log(x, 10
 if associationDirection.lower() == 'yes':
     associationVar = input('\nEnter name of the column that determines the direction of the association:\n')
     if associationVar.lower() == 'beta':
-        df['symbol'] = df[associationVar].apply(lambda x: 'positive' if x >= 0 else 'negative')
+        df['association'] = df[associationVar].apply(lambda val: 'positive' if val >= 0 else 'negative')
+        
     else:
-        df['symbol'] = df[associationVar].apply(lambda x: 'positive' if x >= 1 else 'negative')
+        df['association'] = df[associationVar].apply(lambda val: 'positive' if val >= 1 else 'negative')
 else:
-    df['symbol'] = 'no_corr'
+    df['association'] = 'no_corr'
+    
+df['size'] = 12
 
 x_numeric = input('\nIs your x variable numeric (yes/no)?\n')
 x_numeric = False if x_numeric == 'no' else True
@@ -92,16 +95,24 @@ above_thresh = []
 above = df[df.y >= posThreshold]
 length = len(above.index)
 for i in range(length):
+    
     annot = above.iloc[i]
     above_thresh.append(go.layout.Annotation(
             x=annot[x_axis],
             y=annot.y,
-            text=annot[group]
+            text=annot[annotationVar],
+            font=go.layout.annotation.Font(size=8)
     ))
+
 
 fig = px.scatter(df, x = x_axis, y = 'y', color = group,
                  hover_data = show_on_hover,
-                 template ='plotly_white')
+                 template ='plotly_white',
+                 symbol='association',
+                 symbol_map={"positive":"triangle-up", "negative" :"triangle-down"},
+                 size='size',
+                 size_max=12
+                )
 
 fig.update_layout(
     margin=dict(pad=0),
@@ -110,7 +121,7 @@ fig.update_layout(
     width = 1300,
     height = 700,
     yaxis = go.layout.YAxis(
-        title=r'$-\log_{10} p$'
+        title='-log10(p)'
     ),
     xaxis = go.layout.XAxis(
         automargin = True,
@@ -187,14 +198,6 @@ else:
             )
         )]
     )
-    
-fig.update_traces(
-    marker = go.scatter.Marker(
-#         symbol=df['correlation']
-        size=12,
-#         opacity = 0.5,
-#         line=dict(width=1, color='black'),
-    ))
 
 preview = input('\nWould you like to preview the figure before exporting it (yes/no)?\n')
 if preview == 'yes':
