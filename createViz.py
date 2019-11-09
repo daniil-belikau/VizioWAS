@@ -7,71 +7,132 @@ import plotly.express as px
 import plotly.graph_objects as go
 import plotly.io as pio
 import math
+import enum
 
-separationStrategy = ''
+class Format(enum.Enum):
+    free_text = 1
+    yes_no = 2
+    numeric = 3
+    column_name = 4
+    item_in_list = 5
 
-print('\nPlease make sure that the file containing the data that you want to visualize is in the same folder as this program.')
-dataPath = input('\nEnter the name of the file containing the data to be visualized:\n')
+class InputError(Exception):
 
-print('\n 1. Commas \n 2. Tabs \n 3. Pipe \n 4. Other')
-separationStrategyInput = input('\nEnter the number corresponding to the separation strategy of your file:\n')
+    def __init__(self, msg): 
+        self.msg = msg
 
-if '1' in separationStrategyInput:
-    separationStrategy = ','
-elif '2' in separationStrategyInput:
-    separationStrategy = '\t'
-elif '3' in separationStrategyInput:
-    separationStrategy = '|'
-elif '4' in separationStrategyInput:
-    separationStrategy = input('\nEnter the delimeter used:\n')
+
+def get_text_input(prompt, input_format, message='\n', validation=[]):
+    print(message)
+
+    while True:
+        try:
+            text_input = input(f'{prompt}\n')
+
+            if input_format == 2 and text_input != 'yes' and text_input != 'no':
+                raise InputError("Please enter 'yes' or 'no'.")
+                return text_input == 'yes'
+
+            elif input_format == 3:
+                try:
+                    text_input = float(text_input)
+                except:
+                    raise InputError("Only numeric input accepted.")
+
+            elif input_format == 4 and text_input not in validation:
+                    raise InputError(f"Input must be one of the following: \n{validation}.")
+                
+            elif input_format == 5:
+                if  text_input not in validation.keys():
+                    raise InputError(f"Input must be one of the following: \n{validation.keys()}.")
+                else:
+                    return validation[text_input]
+
+            return text_input
+        
+        except InputError as err:
+            print(err.msg)
+
+
+
+
+
+prompt = 'Enter the path to the file containing the data to be visualized:'
+dataPath = get_text_input(prompt, Format.free_text.value)
+
+message = '\n 1. Commas \n 2. Tabs \n 3. Pipe \n 4. Other'
+prompt = 'Enter the number corresponding to the separation strategy of your file:'
+separation_strategy_options = {
+    '1': ',',
+    '2': '\t',
+    '3': '|',
+    '4': get_text_input
+}
+separation_strategy = get_text_input(prompt, Format.item_in_list.value, message, separation_strategy_options)
+
+if type(separation_strategy) != str:
+    separation_strategy = get_text_input('Specify the separation strategy:', Format.free_text.value)
+
 try:
     df = pd.read_csv(dataPath, sep=separationStrategy)
 except:
+    print('Check that the file path and separation strategy are correct!')
     sys.exit()
 
-x_axis = input('\nEnter the name of the column containing the values for the x axis:\n')
-y_axis = input('\nEnter the name of the column containing the values for the y axis:\n')
-group = input('\nEnter the name of the column containing the values based on which the data points will be grouped:\n')
-associationDirection = input('\nWould you like to show an association direction in your data(yes/no)?\n')
+list_of_columns = list(df.columns)
+
+prompt = 'Which column contains the values for the x axis:'
+x_axis = get_text_input(prompt, Format.column_name.value, validation=list_of_columns)
+prompt = 'Which column contains the values for the y axis:'
+y_axis = get_text_input(prompt, Format.column_name.value, validation=list_of_columns)
+prompt = 'Based on which column should the data points be grouped:'
+group = get_text_input(prompt, Format.column_name.value, validation=list_of_columns)
+prompt = 'Would you like to show the association direction in your figure:'
+association_direction = get_text_input(prompt, Format.yes_no.value)
 
 df.dropna(axis=0, subset=[y_axis], inplace=True)
 df.dropna(axis=1, how='all', inplace=True)
 
-figure_title = input('\nEnter the title you would like the figure to have:\n')
+prompt = 'Enter figure title:'
+figure_title = get_text_input(prompt, Format.free_text.value)
 
 print('\nNow choose what information you would like to be displayed when hovering over a data point.' + 
 '\nPress enter after each column name. Enter "done" if you are done specifying the columns.')
+prompt = 'Enter the next column or "done" if you are finished:'
+list_of_columns.append('done')
 show_on_hover = []
 while True:
-    colName = input('\nEnter the name of the next column or "done" if you are finished:\n')
-    if colName.lower() == 'done': break
-    show_on_hover.append(colName)
+    col_name = get_text_input(prompt, Format.column_name.value, validation=list_of_columns)
+    if col_name == 'done': break
+    show_on_hover.append(col_name)
+list_of_columns.remove('done')
 
-posThreshold = float(input('\nEnter the -log10(p) threshold for the positive corelation in the visualization:\n'))
-negThreshold = float(input('\nEnter the -log10(p) threshold for the negative corelation in the visualization:\n'))
-annotationVar = input('\nEnter the name of the column you would like to use for annotation of significant points:\n')
-show_legendInput = input('\nWould you like a legend to be included in your visualization (yes/no)? You can see what the legend looks like here.\n')
-show_legend = True
-
-if show_legendInput == 'no':
-    show_legend = False
+prompt = 'Enter the -log10(p) for significant positive correlation:'
+pos_threshold = get_text_input(prompt, Format.numeric.value)
+prompt = 'Enter the -log10(p) for significant negative correlation:'
+neg_threshold = get_text_input(prompt, Format.numeric.value)
+prompt = 'Which column would you like to use to annotate significant points:'
+annotation_var = get_text_input(prompt, Format.column_name.value, validation=list_of_columns)
+prompt = 'Would you like to include a legend in your visualization:'
+show_legend = get_text_input(prompt, Format.yes_no.value)
 
 df['y'] = df[df[y_axis].isna() == False][y_axis].apply(lambda x: -math.log(x, 10))
 
-if associationDirection.lower() == 'yes':
-    associationVar = input('\nEnter name of the column that determines the direction of the association:\n')
-    if associationVar.lower() == 'beta':
-        df['association'] = df[associationVar].apply(lambda val: 'positive' if val >= 0 else 'negative')
+if association_direction:
+    prompt = 'Which column determines the direction of association:'
+    association_var = get_text_input(prompt, Format.column_name.value, validation=list_of_columns)
+    if association_var == 'beta':
+        df['association'] = df[association_var].apply(lambda val: 'positive' if val >= 0 else 'negative')
         
     else:
-        df['association'] = df[associationVar].apply(lambda val: 'positive' if val >= 1 else 'negative')
+        df['association'] = df[association_var].apply(lambda val: 'positive' if val >= 1 else 'negative')
 else:
     df['association'] = 'no_corr'
     
 df['size'] = 12
 
-x_numeric = input('\nIs your x variable numeric (yes/no)?\n')
-x_numeric = False if x_numeric == 'no' else True
+prompt = 'Is your x variable numeric:'
+x_numeric = get_text_input(prompt, Format.yes_no.value)
 tick_location = []
 
 if x_numeric:
@@ -92,7 +153,7 @@ else:
         prev = i
 
 above_thresh = []
-above = df[df.y >= posThreshold]
+above = df[df.y >= pos_threshold]
 length = len(above.index)
 for i in range(length):
     
@@ -100,7 +161,7 @@ for i in range(length):
     above_thresh.append(go.layout.Annotation(
             x=annot[x_axis],
             y=annot.y,
-            text=annot[annotationVar],
+            text=annot[annotation_var],
             font=go.layout.annotation.Font(size=8)
     ))
 
@@ -152,9 +213,9 @@ if x_numeric:
         go.layout.Shape(
             type="line",
             x0=0,
-            y0=posThreshold,
+            y0=pos_threshold,
             x1=df[x_axis].max(),
-            y1=posThreshold,
+            y1=pos_threshold,
             line=dict(
                 color="red",
                 width=1
@@ -163,9 +224,9 @@ if x_numeric:
         go.layout.Shape(
             type="line",
             x0=0,
-            y0=negThreshold,
+            y0=neg_threshold,
             x1=df[x_axis].max(),
-            y1=negThreshold,
+            y1=neg_threshold,
             line=dict(
                 color="blue",
                 width=1
@@ -178,9 +239,9 @@ else:
         go.layout.Shape(
             type="line",
             x0=0,
-            y0=posThreshold,
+            y0=pos_threshold,
             x1=df[x_axis].nunique(),
-            y1=posThreshold,
+            y1=pos_threshold,
             line=dict(
                 color="red",
                 width=1
@@ -189,9 +250,9 @@ else:
         go.layout.Shape(
             type="line",
             x0=0,
-            y0=negThreshold,
+            y0=neg_threshold,
             x1=df[x_axis].nunique(),
-            y1=negThreshold,
+            y1=neg_threshold,
             line=dict(
                 color="blue",
                 width=1
@@ -199,25 +260,30 @@ else:
         )]
     )
 
-preview = input('\nWould you like to preview the figure before exporting it (yes/no)?\n')
-if preview == 'yes':
+prompt = 'Would you like to preview the figure before exporting it:'
+preview = get_text_input(prompt, Format.yes_no.value)
+if preview:
     fig.show()
 
-
-visName = input('Enter the name of the file you would like to export:')
+prompt = 'Enter the name of the file you would like to export:'
+vis_name = get_text_input(prompt, Format.free_text.value)
     
-print('\n 1. html file \n 2. png \n 3. jpg \n 4. svg \n 5. pdf \n 6. JSON')
-output_format = input('\nEnter the number corresponding to the output file format you prefer (intercative features only available with html):\n')
+message = '\n 1. html file \n 2. png \n 3. jpg \n 4. svg \n 5. pdf \n 6. JSON'
+prompt = 'Enter the number corresponding to the output file format you prefer (intercative features only available with html):'
+list_of_options = ['1', '2', '3', '4', '5', '6'] 
+output_format = get_text_input(prompt, Format.column_name.value, message, list_of_options)
 
 if '1' in output_format:
-    pio.write_html(fig, file = visName+'.html', auto_open=True)
+    pio.write_html(fig, file = vis_name+'.html', auto_open=True)
 elif '2' in output_format:
-    pio.write_image(fig, file = visName+'.png', format='png')
+    pio.write_image(fig, file = vis_name+'.png', format='png')
 elif '3' in output_format:
-    pio.write_image(fig, file = visName+'.jpg', format='jpg')
+    pio.write_image(fig, file = vis_name+'.jpg', format='jpg')
 elif '4' in output_format:
-    pio.write_image(fig, file = visName+'.svg', format='svg')
+    pio.write_image(fig, file = vis_name+'.svg', format='svg')
 elif '5' in output_format:
-    pio.write_image(fig, file = visName+'.pdf', format='pdf')
+    pio.write_image(fig, file = vis_name+'.pdf', format='pdf')
 elif '6' in output_format:
-    pio.write_json(fig, file = visName)
+    pio.write_json(fig, file = vis_name)
+
+
