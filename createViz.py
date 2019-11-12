@@ -160,15 +160,21 @@ above = df[df['-log10(p)'] >= annotation_threshold]
 above.sort_values(by=['-log10(p)'])
 above = above.iloc[:annotation_limit]
 length = len(above.index)
+
+prev = 1
 for i in range(length):
     
     annot = above.iloc[i]
+    offset = 15 if prev == 1 else -15
     above_thresh.append(go.layout.Annotation(
             x=annot[x_axis],
             y=annot['-log10(p)'],
-            text=annot[annotation_var],
+            ayref='pixel',
+            ay=offset,
+            text=annot[annotation_var].capitalize(),
             font=go.layout.annotation.Font(size=8)
     ))
+    prev *= -1
 
 
 fig = px.scatter(df, x = x_axis, y = '-log10(p)', color = group,
