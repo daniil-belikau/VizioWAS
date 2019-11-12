@@ -29,8 +29,9 @@ def get_text_input(prompt, input_format, message='\n', validation=[]):
         try:
             text_input = input(f'{prompt}\n')
 
-            if input_format == 2 and text_input != 'yes' and text_input != 'no':
-                raise InputError("Please enter 'yes' or 'no'.")
+            if input_format == 2:
+                if text_input != 'yes' and text_input != 'no':
+                    raise InputError("Please enter 'yes' or 'no'.")
                 return text_input == 'yes'
 
             elif input_format == 3:
@@ -54,9 +55,6 @@ def get_text_input(prompt, input_format, message='\n', validation=[]):
             print(err.msg)
 
 
-
-
-
 prompt = 'Enter the path to the file containing the data to be visualized:'
 dataPath = get_text_input(prompt, Format.free_text.value)
 
@@ -74,7 +72,7 @@ if type(separation_strategy) != str:
     separation_strategy = get_text_input('Specify the separation strategy:', Format.free_text.value)
 
 try:
-    df = pd.read_csv(dataPath, sep=separationStrategy)
+    df = pd.read_csv(dataPath, sep=separation_strategy)
 except:
     print('Check that the file path and separation strategy are correct!')
     sys.exit()
@@ -111,25 +109,30 @@ prompt = 'Enter the -log10(p) for significant positive correlation:'
 pos_threshold = get_text_input(prompt, Format.numeric.value)
 prompt = 'Enter the -log10(p) for significant negative correlation:'
 neg_threshold = get_text_input(prompt, Format.numeric.value)
+prompt = 'Enter the -log10(p) threshold for annotating values on the figure:'
+annotation_threshold = get_text_input(prompt, Format.numeric.value)
 prompt = 'Which column would you like to use to annotate significant points:'
 annotation_var = get_text_input(prompt, Format.column_name.value, validation=list_of_columns)
+prompt = 'The number of annotations per figure is limited to 10 to prevent crowdedness. Would you like to change this limit:'
+annotation_limit_change = get_text_input(prompt, Format.yes_no.value)
+annotation_limit = 10
+if annotation_limit_change:
+    prompt = 'What is the maximum number of annotations you would like on your figure:'
+    annotation_limit = int(get_text_input(prompt, Format.numeric.value, validation=list_of_columns))
+    
 prompt = 'Would you like to include a legend in your visualization:'
 show_legend = get_text_input(prompt, Format.yes_no.value)
 
-df['y'] = df[df[y_axis].isna() == False][y_axis].apply(lambda x: -math.log(x, 10))
+df['-log10(p)'] = df[df[y_axis].isna() == False][y_axis].apply(lambda x: -math.log(x, 10))
 
 if association_direction:
     prompt = 'Which column determines the direction of association:'
     association_var = get_text_input(prompt, Format.column_name.value, validation=list_of_columns)
-    if association_var == 'beta':
-        df['association'] = df[association_var].apply(lambda val: 'positive' if val >= 0 else 'negative')
+    if 'beta' in association_var.lower():
+        df['symbol'] = df[association_var].apply(lambda val: 'triangle-up' if val >= 0 else 'triangle-down')
         
     else:
-        df['association'] = df[association_var].apply(lambda val: 'positive' if val >= 1 else 'negative')
-else:
-    df['association'] = 'no_corr'
-    
-df['size'] = 12
+        df['symbol'] = df[association_var].apply(lambda val: 'triangle-up' if val >= 1 else 'triangle-down')
 
 prompt = 'Is your x variable numeric:'
 x_numeric = get_text_input(prompt, Format.yes_no.value)
@@ -153,27 +156,59 @@ else:
         prev = i
 
 above_thresh = []
-above = df[df.y >= pos_threshold]
+above = df[df['-log10(p)'] >= annotation_threshold]
+above.sort_values(by=['-log10(p)'])
+above = above.iloc[:annotation_limit]
 length = len(above.index)
 for i in range(length):
     
     annot = above.iloc[i]
     above_thresh.append(go.layout.Annotation(
             x=annot[x_axis],
-            y=annot.y,
+            y=annot['-log10(p)'],
             text=annot[annotation_var],
             font=go.layout.annotation.Font(size=8)
     ))
 
 
-fig = px.scatter(df, x = x_axis, y = 'y', color = group,
+fig = px.scatter(df, x = x_axis, y = '-log10(p)', color = group,
                  hover_data = show_on_hover,
                  template ='plotly_white',
-                 symbol='association',
-                 symbol_map={"positive":"triangle-up", "negative" :"triangle-down"},
-                 size='size',
-                 size_max=12
                 )
+
+hover_info_list = []
+hover_info_size = len(show_on_hover)
+for i in range(hover_info_size):
+    if i != hover_info_size - 1:
+        hover_info_list.append(f'{show_on_hover[i]}=%{{customdata[{i}]}}<br>')
+    else:
+        hover_info_list.append(f'{show_on_hover[i]}=%{{customdata[{i}]}}')
+
+hover_info_template = ''.join(hover_info_list)
+
+fig.update_traces(patch=dict(
+    hovertemplate=hover_info_template,
+    marker={'size':12}
+))
+
+if association_direction:
+    for gr in df[group].unique():
+        fig.update_traces(patch=dict(
+            legendgroup=gr,
+            name=gr,
+            marker={'symbol': list(df[df[group]==gr]['symbol'])},
+        ), selector=dict(
+            legendgroup=f'{group}={gr}'
+        ))
+        
+else:
+    for gr in df[group].unique():
+        fig.update_traces(patch=dict(
+            legendgroup=gr,
+            name=gr,
+        ), selector=dict(
+            legendgroup=f'{group}={gr}'
+        ))
 
 fig.update_layout(
     margin=dict(pad=0),
@@ -200,8 +235,8 @@ fig.update_layout(
         font = dict(
             size = 10
         ),
-        itemclick='toggleothers',
-        itemdoubleclick='toggle',
+        itemclick=False,
+        itemdoubleclick=False,
         tracegroupgap=1
     ),
     annotations = above_thresh
@@ -259,11 +294,13 @@ else:
             )
         )]
     )
+    
+fig.layout
 
 prompt = 'Would you like to preview the figure before exporting it:'
 preview = get_text_input(prompt, Format.yes_no.value)
 if preview:
-    fig.show()
+    fig.show(config={'editable':True})
 
 prompt = 'Enter the name of the file you would like to export:'
 vis_name = get_text_input(prompt, Format.free_text.value)
