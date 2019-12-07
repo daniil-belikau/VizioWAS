@@ -76,7 +76,7 @@ def determine_offset(state, y_axis_positive):
 def output_plot_file(figure):
     vis_name = get_text_input('Enter a name for the file that will be exported:', 
                             Format.free_text.value)
-    output_format = get_text_input('Enter the number corresponding to the output file format you prefer (intercative features only available with html):', 
+    output_format = get_text_input('Enter the number corresponding to the output file format you prefer (interactive features only available with html):', 
                                 Format.column_name.value, 
                                 '\n 1. html file \n 2. png (small file, but lower image quality) \n 3. jpg (small file, but lower image quality) \n 4. svg \n 5. pdf \n 6. JSON', 
                                 ['1', '2', '3', '4', '5', '6'])
@@ -111,8 +111,8 @@ def main():
                                         { '1': ',',
                                         '2': '\t',
                                         '3': '|',
-                                        '4': get_text_input })
-    if type(separation_strategy) != str:
+                                        '4': 'other' })
+    if separation_strategy == 'other':
         separation_strategy = get_text_input('Specify the separation strategy:', Format.free_text.value)
     try:
         df = pd.read_csv(dataPath, sep=separation_strategy)
@@ -124,6 +124,7 @@ def main():
     list_of_columns = list(df.columns)
     x_axis = get_text_input('Which column contains the values for the x axis:', 
                             Format.column_name.value, 
+                            message=f'This is the list of available columns: \n {list_of_columns}',
                             validation=list_of_columns)
     y_axis = get_text_input('Which column contains the values for the y axis:', 
                             Format.column_name.value, 
@@ -131,7 +132,7 @@ def main():
     group = get_text_input('Based on which column should the data points be grouped:', 
                             Format.column_name.value, 
                             validation=list_of_columns)
-    association_direction = get_text_input('Would you like to show the association direction in your figure:', 
+    association_direction = get_text_input('Would you like to show the association direction in your figure (yes/no):', 
                                             Format.yes_no.value)
 
     df.dropna(axis=0, subset=[y_axis], inplace=True)
@@ -147,14 +148,14 @@ def main():
 
     if association_direction:
         association_var = get_text_input('Which column determines the direction of association:', 
-                                        Format.column_name.value, 
+                                        Format.column_name.value,
                                         validation=list_of_columns)
         if 'beta' in association_var.lower():
             df['-log10(p)'] = df['-log10(p)']*df[association_var].apply(lambda val: 1 if val >= 0 else -1)
         else:
             df['-log10(p)'] = df['-log10(p)']*df[association_var].apply(lambda val: 1 if val >= 1 else -1)
 
-    x_numeric = get_text_input('Is your x variable numeric:', 
+    x_numeric = get_text_input('Is your x variable numeric (yes/no):', 
                                 Format.yes_no.value)
     tick_location = []
     if x_numeric:
@@ -190,7 +191,7 @@ def main():
         show_on_hover.append(col_name)
         show_on_hover_titles.append(col_title)
         
-    print('\nName any columns for which you would like to specify a signigicant digit cutoff or scientific notaion.' + 
+    print('\nName any columns for which you would like to specify a significant digit cutoff or scientific notation.' + 
     '\nPress enter after each column name. Enter "done" if you are done specifying the columns.')
     column_transformations = []
     while True:
@@ -198,12 +199,12 @@ def main():
                                 Format.column_name.value, 
                                 validation=list_of_columns)
         if col_name == 'done': break
-        sig_digs = get_text_input('Would you like to set a number of significant digits:',
+        sig_digs = get_text_input('Would you like to set a number of significant digits (yes/no):',
                                   Format.yes_no.value)
         if sig_digs:
             sig_digs = get_text_input('How many significant digits would you like to show for this column:',
                                      Format.numeric.value)
-        scientific_notation = get_text_input('Would you like to show this column using scientific notation:',
+        scientific_notation = get_text_input('Would you like to show this column using scientific notation (yes/no):',
                                             Format.yes_no.value)
         column_transformations.append((col_name, sig_digs, scientific_notation))
         
@@ -217,7 +218,7 @@ def main():
     else:
         association_threshold = get_text_input('Enter the -log10(p) for significant correlation:', 
                                         Format.numeric.value)
-    annotation_threshold_column = get_text_input('Do you have a column that determines if a data point should be annotated:', 
+    annotation_threshold_column = get_text_input('Do you have a column that determines if a data point should be annotated (yes/no):', 
                                                   Format.yes_no.value)
     if not annotation_threshold_column:
         annotation_threshold = get_text_input('Enter the -log10(p) threshold for annotating values on the figure:', 
@@ -228,7 +229,7 @@ def main():
                                               validation=list_of_columns)
     annotation_var = get_text_input('Which column would you like to use to annotate significant points:', 
                                     Format.column_name.value, validation=list_of_columns)
-    annotation_limit_change = get_text_input('The 10 most significant points will be annotated to prevent crowdedness. Would you like to change this limit:', 
+    annotation_limit_change = get_text_input('The 10 most significant points will be annotated to prevent crowdedness. Would you like to change this limit (yes/no):', 
                                              Format.yes_no.value)
     annotation_limit = 10
     if annotation_limit_change:
@@ -268,7 +269,7 @@ def main():
                                 { '1':8, 
                                 '2':12, 
                                 '3':16 })
-    show_legend = get_text_input('Would you like to include a legend in your visualization:', 
+    show_legend = get_text_input('Would you like to include a legend in your visualization (yes/no):', 
                                 Format.yes_no.value)
     figure_width = get_text_input('The width in pixels:', 
                                 Format.numeric.value, 
@@ -279,7 +280,6 @@ def main():
     for spec in column_transformations:
         if spec[2]:
             temp = f'.{int(spec[1])}e'
-            print(temp)
             df[spec[0]] = df[spec[0]].apply(lambda x: format(x, temp))
         else:
             df[spec[0]] = df[spec[0]].apply(lambda x: round(x, -int(math.floor(math.log10(abs(x)))-spec[1] + 1) ))
@@ -479,7 +479,7 @@ def main():
     export_file = True
     while export_file:
         output_plot_file(fig)
-        export_file = get_text_input('Would you like to export this plot to another file:',
+        export_file = get_text_input('Would you like to export this plot to another file (yes/no):',
                         Format.yes_no.value)
 #         vis_name = get_text_input('Enter a name for the file that will be exported:', 
 #                                 Format.free_text.value)
@@ -503,3 +503,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
