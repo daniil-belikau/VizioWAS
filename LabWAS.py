@@ -1,14 +1,7 @@
-import sys
-import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
-import plotly.io as pio
-import math
-import enum
-
-import vizutil.util as util
-import vizutil.data as data
-import vizutil.plot as plot
+import vizutil 
+from vizutil import plot
+from vizutil import data 
+from vizutil import util
 
 
 def run():

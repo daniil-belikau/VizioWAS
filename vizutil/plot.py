@@ -2,7 +2,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import plotly.io as pio
 
-import util
+from . import util
 
 
 # can export html with toImageButton toggled to produce static plots after adjusting annotations
@@ -54,8 +54,9 @@ def assemble_hover_data(columns):
     columns.remove('done')
     list_length = len(hover_cols_titles)
     hover_template = [f'{col}=%{{customdata[{i}]}}<br>' if i != list_length - 1 else f'{col}=%{{customdata[{i}]}}' for i, col in enumerate(hover_cols_titles)]
+    hover_str = ''.join(hover_template)
 
-    return hover_cols, hover_template, hover_cols_transformations
+    return hover_cols, hover_str, hover_cols_transformations
 
 
 def produce_figure(df, x_axis, group, hover_cols):
@@ -66,7 +67,7 @@ def customize_markers(fig, unique_groups, group, hover_template, marker_size):
     for gr in unique_groups:
         trace = fig.select_traces(selector={'legendgroup' : f'{group}={gr}'})
         color_hex = next(trace).marker.color.lstrip('#')
-        color_rgba = tuple([int(color_hex[i:i+2], 16) if i != 5 else 0.5 for i in (0,2,4,1)])
+        color_rgba = tuple([int(color_hex[i:i+2], 16) if i != 1 else 0.5 for i in (0,2,4,1)])
         fig.update_traces(patch={
             'hovertemplate' : hover_template,
             'legendgroup' : gr,
