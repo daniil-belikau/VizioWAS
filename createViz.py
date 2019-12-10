@@ -7,54 +7,59 @@ import math
 import enum
 
 
-class Format(enum.Enum):
-    free_text = 1
-    yes_no = 2
-    numeric = 3
-    column_name = 4
-    item_in_list = 5
-    press_enter = 6
+# class Format(enum.Enum):
+#     free_text = 1
+#     yes_no = 2
+#     numeric = 3
+#     column_name = 4
+#     item_in_list = 5
+#     press_enter = 6
 
 
-class InputError(Exception):
+# class InputError(Exception):
 
-    def __init__(self, msg): 
-        self.msg = msg
+#     def __init__(self, msg): 
+#         self.msg = msg
 
 
-def get_text_input(prompt, input_format, message='\n', validation=[]):
-    print(message)
+# def get_text_input(prompt, input_format, message='\n', validation=[]):
+#     print(message)
 
-    while True:
-        try:
-            text_input = input(f'{prompt}\n')
+#     while True:
+#         try:
+#             text_input = input(f'{prompt}\n')
 
-            if input_format == 2:
-                if text_input != 'yes' and text_input != 'no':
-                    raise InputError("Please enter 'yes' or 'no'.")
-                return text_input == 'yes'
+#             if input_format == 2:
+#                 if text_input != 'yes' and text_input != 'no':
+#                     raise InputError("Please enter 'yes' or 'no'.")
+#                 return text_input == 'yes'
 
-            elif input_format == 3:
-                try:
-                    text_input = float(text_input)
-                except:
-                    raise InputError("Only numeric input accepted.")
+#             elif input_format == 3:
+#                 try:
+#                     text_input = float(text_input)
+#                 except:
+#                     raise InputError("Only numeric input accepted.")
 
-            elif input_format == 4 and text_input not in validation:
-                    raise InputError(f"Input must be one of the following: \n{validation}.")
+#             elif input_format == 4 and text_input not in validation:
+#                     raise InputError(f"Input must be one of the following: \n{validation}.")
                 
-            elif input_format == 5:
-                if  text_input not in validation.keys():
-                    raise InputError(f"Input must be one of the following: \n{validation.keys()}.")
-                else:
-                    return validation[text_input]
+#             elif input_format == 5:
+#                 if  text_input not in validation.keys():
+#                     raise InputError(f"Input must be one of the following: \n{validation.keys()}.")
+#                 else:
+#                     return validation[text_input]
 
-            return text_input
+#             return text_input
         
-        except InputError as err:
-            print(err.msg)
+#         except InputError as err:
+#             print(err.msg)
             
-            
+
+
+
+
+# 
+# 
 def determine_offset(state, y_axis_positive):
     if state == 0:
         if y_axis_positive:
@@ -71,8 +76,17 @@ def determine_offset(state, y_axis_positive):
             return (25, -4, 0)
         else:
             return (25, 4, 0)
+# 
+# 
+
+
+
+
         
-        
+
+
+# 
+# 
 def output_plot_file(figure):
     vis_name = get_text_input('Enter a name for the file that will be exported:', 
                             Format.free_text.value)
@@ -100,9 +114,16 @@ def output_plot_file(figure):
         pio.write_image(figure, file = vis_name+'.pdf', format='pdf')
     elif '6' in output_format:
         pio.write_json(figure, file = vis_name)
+# 
+# 
+
+
+
+
 
 
 def main():
+    # MAIN SCRIPT
     dataPath = get_text_input('Enter the path to the file containing the data to be visualized:', 
                             Format.free_text.value)
     separation_strategy = get_text_input('\n 1. Commas \n 2. Tabs \n 3. Pipe \n 4. Other', 
@@ -114,13 +135,26 @@ def main():
                                         '4': 'other' })
     if separation_strategy == 'other':
         separation_strategy = get_text_input('Specify the separation strategy:', Format.free_text.value)
+
+
+
+
+# 
+# 
     try:
         df = pd.read_csv(dataPath, sep=separation_strategy)
         df = df.sample(frac=1).reset_index(drop=True)
     except:
         print('Check that the file path and separation strategy are correct!')
         sys.exit()
+# 
+# 
 
+
+
+
+
+    # MAIN SCRIPT
     list_of_columns = list(df.columns)
     x_axis = get_text_input('Which column contains the values for the x axis:', 
                             Format.column_name.value, 
@@ -135,15 +169,34 @@ def main():
     association_direction = get_text_input('Would you like to show the association direction in your figure (yes/no):', 
                                             Format.yes_no.value)
 
+
+
+
+
+
+
+
+# 
+# 
     df.dropna(axis=0, subset=[y_axis], inplace=True)
     df.dropna(axis=1, how='all', inplace=True)
     if df[df[y_axis] == 0].shape[0] > 0:
         print('Please make sure there are no P-values equal to 0 in your data.')
         sys.exit()
+# 
+# 
+
+
+
+
+
+
+
 #     y_value_min = df[df[y_axis] != 0].min()[y_axis]
 #     df[y_axis] = df[df[y_axis].isna() == False][y_axis].apply(lambda y: y if y != 0 else y_value_min)
     df['-log10(p)'] = df[df[y_axis].isna() == False][y_axis].apply(lambda x: -math.log(x, 10))
-    
+
+
     list_of_columns = list(df.columns)
 
     if association_direction:
@@ -155,6 +208,16 @@ def main():
         else:
             df['-log10(p)'] = df['-log10(p)']*df[association_var].apply(lambda val: 1 if val >= 1 else -1)
 
+    # 
+    # 
+
+
+
+
+    
+
+    # 
+    #   
     x_numeric = get_text_input('Is your x variable numeric (yes/no):', 
                                 Format.yes_no.value)
     tick_location = []
@@ -174,7 +237,14 @@ def main():
             i += prev
             tick_location.append((prev + i)/2)
             prev = i
+# 
+# 
 
+
+
+
+
+    # PLACE THIS PART INTO THE VIZ.PY FILE, WITH OTHER PROMPTS THAT DON'T CHANGE
     list_of_columns = list(df.columns)
     print('\nNow choose what information you would like to be displayed when hovering over a data point.' + 
     '\nPress enter after each column name. Enter "done" if you are done specifying the columns.')
@@ -190,7 +260,7 @@ def main():
                                   Format.free_text.value)
         show_on_hover.append(col_name)
         show_on_hover_titles.append(col_title)
-        
+
     print('\nName any columns for which you would like to specify a significant digit cutoff or scientific notation.' + 
     '\nPress enter after each column name. Enter "done" if you are done specifying the columns.')
     column_transformations = []
@@ -209,7 +279,15 @@ def main():
         column_transformations.append((col_name, sig_digs, scientific_notation))
         
     list_of_columns.remove('done')
+# 
+# 
 
+
+
+
+
+
+    # Goes into the VIZ.PY   
     if association_direction:
         pos_threshold = get_text_input('Enter the -log10(p) for significant positive correlation:', 
                                         Format.numeric.value)
@@ -231,12 +309,24 @@ def main():
                                     Format.column_name.value, validation=list_of_columns)
     annotation_limit_change = get_text_input('The 10 most significant points will be annotated to prevent crowdedness. Would you like to change this limit (yes/no):', 
                                              Format.yes_no.value)
+    
+    # SET UP AS GLOBAL VAR IN VIZ.PY 
     annotation_limit = 10
     if annotation_limit_change:
         annotation_limit = int(get_text_input('What is the maximum number of annotations you would like on your figure:', 
                                             Format.numeric.value, 
                                             validation=list_of_columns))
 
+
+
+
+
+
+
+
+
+# 
+# 
     above_thresh = []
     if not annotation_threshold_column:
         above = df[(df['-log10(p)'] >= annotation_threshold) | (df['-log10(p)'] <= -annotation_threshold)]
@@ -260,6 +350,14 @@ def main():
                 font=go.layout.annotation.Font(size=10)
         ))
         state = offset[2]
+# 
+# 
+
+
+
+
+
+
 
     figure_title = get_text_input('Enter figure title:', 
                                 Format.free_text.value)
@@ -276,7 +374,15 @@ def main():
                                 '\nEnter the dimensions for the figure.')
     figure_height = get_text_input('The height in pixels:', 
                                     Format.numeric.value)
-    
+
+
+
+
+
+
+
+# 
+# 
     for spec in column_transformations:
         if spec[2]:
             temp = f'.{int(spec[1])}e'
@@ -286,6 +392,17 @@ def main():
 #     df[y_axis] = df[y_axis].apply(lambda x: format(x,".2e"))    
 #     df['effect_estimate'] = df['effect_estimate'].apply(lambda x: -int(math.floor(math.log10(abs(x))) - 2)))
 #     df['std_error'] = df['std_error'].apply(lambda x: round(x, -int(math.floor(math.log10(abs(x))) - 2)))
+
+
+
+
+
+
+
+
+
+
+
 
     fig = px.scatter(df, x = x_axis, y = '-log10(p)', color = group,
                     hover_data = show_on_hover,
