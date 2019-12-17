@@ -80,17 +80,18 @@ def place_x_ticks(df, group, numeric, x_axis=''):
     return tick_location
 
 
-def create_annotations(df, x_axis, annotation_col, threshold, limit, manual=False):
+def create_annotations(df, x_axis, y_axis, annotation_col, threshold, limit, manual=False):
     annotations = []
     if manual:
         above_thresh = df[(df['y'] >= threshold) | (df['y'] <= -threshold)]
     else:
         above_thresh = df[df[threshold] == True]
-    above_sorted = above_thresh.sort_values(by=[x_axis], ascending=True)
-    above_final = above_sorted.iloc[:limit]
+    above_sorted = above_thresh.sort_values(by=[y_axis], ascending=True)
+    if limit:
+        above_sorted = above_sorted.iloc[:limit]
     state = 0
-    for index in range(len(above_final.index)):
-        annot = above_final.iloc[index]
+    for index in range(len(above_sorted.index)):
+        annot = above_sorted.iloc[index]
         offset = determine_offset(state, annot['y']>0)
         annotations.append(go.layout.Annotation(
                 x=annot[x_axis],
@@ -100,7 +101,7 @@ def create_annotations(df, x_axis, annotation_col, threshold, limit, manual=Fals
                 axref='pixel',
                 ax=offset[0],
                 text=annot[annotation_col],
-                font=go.layout.annotation.Font(size=10)
+                font=go.layout.annotation.Font(size=12)
         ))
         state = offset[2]
     return annotations
