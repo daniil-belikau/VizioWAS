@@ -8,7 +8,6 @@ if __name__ == "__main__":
 
     # vis type
     # implement mutually exclusive argument group ?
-    # Test nargs = 1 vs none, to see what to use for mandatory args
     parser.add_argument('--vis_type', help='The type of data association study you are trying to visualize.', type=str)
     
     # data impot

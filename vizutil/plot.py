@@ -3,13 +3,9 @@ import plotly.graph_objects as go
 import plotly.io as pio
 import os
 
-from . import util
-
 
 # can export html with toImageButton toggled to produce static plots after adjusting annotations
 def output_plot_file(figure, path, output_format, width=900, height=600):
-    # file_name = util.get_text_input('Enter a name for the file that will be exported:', util.Format.free_text.value)
-    # output_format = util.get_text_input('Enter the number corresponding to the output file format you prefer (interactive features only available with html):', util.Format.column_name.value, '\n 1. html file \n 2. png (small file, but lower image quality) \n 3. jpg (small file, but lower image quality) \n 4. svg \n 5. pdf \n 6. JSON', ['1', '2', '3', '4', '5', '6'])
     if 'studio' in output_format:
         pio.write_html(figure, file = path+'.html', config={
             'editable':True, 
@@ -34,38 +30,12 @@ def output_plot_file(figure, path, output_format, width=900, height=600):
     elif 'json' in output_format:
         pio.write_json(figure, file = path)
 
-    # pio.write_html(figure, file = file_name+'.html', config={'editable':True, 'displaylogo' : False, 'responsive' : True,
-    #                     'toImageButtonOptions': {
-    #         'format' : 'svg',
-    # #       'format' : 'pgn',
-    # #       'format' : 'jpeg',
-    # #       'format' : 'pdf',
-    #         'width'  : 2000,
-    #         'height' : 1200
-    #     }, 'showSendToCloud' : True})
-
 
 def assemble_hover_data(hover_pref):
-    # columns.append('done')
     hover_cols = [hover_pref[i] for i in range(0, len(hover_pref), 4)]
-    # hover_cols_titles = [hover_pref[i] for i in range(1, len(hover_pref), 4)]
-
     # Make sure that the check catches all cases
     hover_cols_transformations = [(hover_pref[i], int(hover_pref[i+2]), hover_pref[i+3]=='y') for i in range(0, len(hover_pref), 4) if not hover_pref[i+2] == 'n']
-    # while True:
-    #     col_name = util.get_text_input('Enter the next column or "done" if you are finished:', util.Format.column_name.value, validation=columns)
-    #     if col_name == 'done': break
-    #     col_title = util.get_text_input('Enter the name that this column will be displayed under:', util.Format.free_text.value)
-    #     transform = util.get_text_input('Do you want to specify a number of signigicant digits or scientific notation for this column (yes/no):', util.Format.yes_no.value)
-    #     if transform:
-    #         sig_digs = util.get_text_input('Would you like to set a number of significant digits (yes/no):', util.Format.yes_no.value)
-    #         if sig_digs:
-    #             sig_digs = util.get_text_input('How many significant digits would you like to show for this column:', util.Format.numeric.value)
-    #         scientific_notation = util.get_text_input('Would you like to show this column using scientific notation (yes/no):', util.Format.yes_no.value)
-    #         hover_cols_transformations.append((col_name, sig_digs, scientific_notation))
-    #     hover_cols.append(col_name)
-    #     hover_cols_titles.append(col_title)
-    # columns.remove('done')
+    
     list_length = len(hover_pref)/4
     hover_template = [f'{hover_pref[i]}=%{{customdata[{index}]}}<br>' if index != list_length - 1 else f'{hover_pref[i]}=%{{customdata[{index}]}}' for index, i in enumerate(range(1, len(hover_pref), 4))]
     hover_str = ''.join(hover_template)
@@ -125,4 +95,3 @@ def export_plot(fig, path, formats, width, height):
     # os.mkdir('plot_output')
     for f in formats:
         output_plot_file(fig, path, f, width, height)
-    # export_file = util.get_text_input('Would you like to export this plot to another file (yes/no):', util.Format.yes_no.value)
