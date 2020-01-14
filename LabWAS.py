@@ -1,4 +1,3 @@
-import vizutil 
 from vizutil import plot
 from vizutil import data
 

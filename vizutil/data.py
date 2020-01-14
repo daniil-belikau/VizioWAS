@@ -54,7 +54,7 @@ def data_clean(df, mandatory, y_axis):
 def format_yaxis(df, y_axis, association_var):
     if association_var:
         stat = 0 if 'beta' in association_var.lower() else 1
-        df['y'] = df.apply(lambda x: -math.log(x[y_axis],10) if x[association_var] > stat else math.log(x['pvalue'],10), axis=1)
+        df['y'] = df.apply(lambda x: -math.log10(x[y_axis]) if x[association_var] > stat else math.log10(x['pvalue']), axis=1)
     else:
         df['y'] = df[y_axis].apply(lambda x: -math.log(x, 10))
     return df

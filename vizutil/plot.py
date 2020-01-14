@@ -13,8 +13,8 @@ def output_plot_file(figure, path, output_format, width=900, height=600):
             'showSendToCloud' : True,
             'toImageButtonOptions': {
                 'format' : 'png',
-                'width'  : 900,
-                'height' : 600,
+                'width'  : width,
+                'height' : height,
                 'scale'  : 6
             }})
     elif 'html' in output_format:
@@ -70,10 +70,10 @@ def customize_markers(fig, unique_groups, group, hover_template, marker_size, cr
 def customize_layout(fig, title, annotations, x_axis, show_legend, x_max, lines=[], corr_dir=True):
     layout = {
         'title_text' : title,
-        'yaxis' : go.layout.YAxis(showgrid=False, zeroline=False, title='-log10(p) x Direction of Effect'),
-        'xaxis' : go.layout.XAxis(automargin=True, showgrid=False, title=x_axis, showticklabels=False),
+        'yaxis' : go.layout.YAxis(linecolor='black', showgrid=False, zeroline=False, title='-log10(p) x Direction of Effect'),
+        'xaxis' : go.layout.XAxis(automargin=True, linecolor='black', showgrid=False, title=x_axis, showticklabels=False),
         'showlegend' : show_legend,
-        'legend' : go.layout.Legend(font = {'size' : 10}, itemclick='toggleothers', itemdoubleclick='toggle', tracegroupgap=1, orientation='h'),
+        'legend' : go.layout.Legend(font = {'size' : 10}, itemclick='toggleothers', itemdoubleclick='toggle', tracegroupgap=1, orientation='v'),
         'annotations' : annotations
     }
     layout['shapes'] = [go.layout.Shape(type='line', x0=0, x1=x_max, y0=l[0], y1=l[0], line={'color':l[1], 'width':2}, layer='below') for l in lines]
