@@ -67,15 +67,20 @@ def customize_markers(fig, unique_groups, group, hover_template, marker_size, cr
     return fig
 
 
-def customize_layout(fig, title, annotations, x_axis, show_legend, x_max, lines=[], corr_dir=True):
+def customize_layout(fig, title, annotations, x_axis, show_legend, x_max, lines=[], corr_dir=True, tick_labels=False):
     layout = {
         'title_text' : title,
-        'yaxis' : go.layout.YAxis(linecolor='black', showgrid=False, zeroline=False, title='-log10(p) x Direction of Effect'),
-        'xaxis' : go.layout.XAxis(automargin=True, linecolor='black', showgrid=False, title=x_axis, showticklabels=False),
+        'yaxis' : go.layout.YAxis(automargin=True, linecolor='black', showgrid=False, zeroline=False, title='-log10(p) x Direction of Effect'),
+        'xaxis' : go.layout.XAxis(automargin=True, linecolor='black', showgrid=False, zeroline=False, title=x_axis, showticklabels=tick_labels),
         'showlegend' : show_legend,
         'legend' : go.layout.Legend(font = {'size' : 10}, itemclick='toggleothers', itemdoubleclick='toggle', tracegroupgap=1, orientation='v'),
         'annotations' : annotations
     }
+    
+    # if tick_labels:
+        # layout['xaxis'] = go.layout.XAxis(automargin=True, linecolor='black', showgrid=False, title=x_axis, showticklabels=True, 
+        #                                 tickangle=60, ticktext=tick_labels[0], tickvals=tick_labels[1], tickfont = go.layout.xaxis.Tickfont(size = 10))
+
     layout['shapes'] = [go.layout.Shape(type='line', x0=0, x1=x_max, y0=l[0], y1=l[0], line={'color':l[1], 'width':2}, layer='below') for l in lines]
     fig.update_layout(layout)
     return fig

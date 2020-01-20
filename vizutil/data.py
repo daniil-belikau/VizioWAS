@@ -54,7 +54,7 @@ def data_clean(df, mandatory, y_axis):
 def format_yaxis(df, y_axis, association_var):
     if association_var:
         stat = 0 if 'beta' in association_var.lower() else 1
-        df['y'] = df.apply(lambda x: -math.log10(x[y_axis]) if x[association_var] > stat else math.log10(x['pvalue']), axis=1)
+        df['y'] = df.apply(lambda x: -math.log10(x[y_axis]) if x[association_var] > stat else math.log10(x[y_axis]), axis=1)
     else:
         df['y'] = df[y_axis].apply(lambda x: -math.log(x, 10))
     return df
@@ -62,22 +62,24 @@ def format_yaxis(df, y_axis, association_var):
 
 def place_x_ticks(df, group, numeric, x_axis=''):
     if numeric:
-        return [df[df[group] == group][x_axis].mean() for group in df[group].unique()]
-        # for unique_group in df[group].unique():
-        #     tick_location.append(df[df[group] == unique_group][x_axis].mean())
+        tick_labels = []
+        # return [(group, df[df[group] == group][x_axis].mean()) for group in df[group].unique()]
+        for unique_group in df[group].unique():
+            tick_labels.append(df[df[group] == unique_group][x_axis].mean())
     else:
-        tick_location = []
+        tick_labels = []
         tick_dict = dict.fromkeys(df['group'].unique(), 0)
         # for unique_group in df[group].unique():
         #     tick_dict[unique_group] = 0
         for row in df.iterrows():
             tick_dict[row[group]] += 1
         prev = 0
-        for i in tick_dict.values():
-            i += prev
-            tick_location.append((prev + i)/2)
-            prev = i
-    return tick_location
+        for key in tick_dict.keys():
+            tick_dict[key] += prev
+            # add group name and tickloc as tuple
+            tick_labels.append((str(key), (prev + tick_dict[key])/2))
+            prev = tick_dict[key]
+    return tick_labels
 
 
 def create_annotations(df, x_axis, y_axis, annotation_col, threshold, limit, manual=False):

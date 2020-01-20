@@ -1,6 +1,7 @@
 import argparse
 
 import LabWAS
+import PheWAS
 
 
 if __name__ == "__main__":
@@ -61,4 +62,7 @@ if __name__ == "__main__":
     
     if args.vis_type == 'lab':
         LabWAS.run(args)
+
+    elif args.vis_type == 'phenome':
+        PheWAS.run(args)
     
