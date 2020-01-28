@@ -109,6 +109,13 @@ def create_annotations(df, x_axis, y_axis, annotation_col, threshold, limit, man
     return annotations
 
 
+def bonferroni(df, y_axis):
+    n = df.shape[0]
+    correction = 0.05 / n
+    threshold = -math.log10(correction)
+    return threshold
+
+
 # modifies crucial columns, so must happen last. Create new column?
 def transform_hover_data(df, transformations):
     for tupl in transformations:
