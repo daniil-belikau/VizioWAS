@@ -48,7 +48,7 @@ $ python3 createViz.py \
 ### Legal Arguments
 
 The following is the list of available command line arguments (make sure to enclose multi-word arguments in quotation marks):
-* **--vis_type** <type> Type of summary stats being visualized. Can be *lab* or *phenome*.
+* **--vis_type** [<type>] Type of summary stats being visualized. Can be *lab* or *phenome*.
 * **--input_path** <path> Path to file containing summary stat data (tested with .txt and .csv files).
 * **--separation_strategy** <strat> Specify the delimiter used in the data file (*'\t'*, *'\s'*, *','*).
 * **--x_axis** <name> Name of the x_axis, as it appears in the given file.
