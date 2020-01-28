@@ -5,8 +5,8 @@ ViziOWAS is a command line based tool for creating interactive and static visual
 Tested in Mac and Linux environments.
 
 Written for use with [Python 3.7](https://www.python.org/), and the following packages used:
-* [pandas (>=0.24.2 recommended)](http://pandas.pydata.org/)
-* [plotly (>=4.1.1 recommded)](https://plot.ly/python/)
+* [pandas (*>*=0.24.2 recommended)](http://pandas.pydata.org/)
+* [plotly (*>*=4.1.1 recommded)](https://plot.ly/python/)
 
 ## Usage
 
@@ -48,24 +48,24 @@ $ python3 createViz.py \
 ### Legal Arguments
 
 The following is the list of available command line arguments (make sure to enclose multi-word arguments in quotation marks):
-* **--vis_type** [<type>] Type of summary stats being visualized. Can be *lab* or *phenome*.
-* **--input_path** <path> Path to file containing summary stat data (tested with .txt and .csv files).
-* **--separation_strategy** <strat> Specify the delimiter used in the data file (*'\t'*, *'\s'*, *','*).
-* **--x_axis** <name> Name of the x_axis, as it appears in the given file.
-* **--y_axis** <name> Name of the y_axis, as it appears in the given file.
-* **--group** <name> Name of the grouping column, as it appears in the given file.
-* **--association_var** <name> Name of the column that determines direction of effect. Direction of effect not shown, if this arg is not specified.
+* **--vis_type** *<*type*>* Type of summary stats being visualized. Can be *lab* or *phenome*.
+* **--input_path** *<*path*>* Path to file containing summary stat data (tested with .txt and .csv files).
+* **--separation_strategy** *<*strat*>* Specify the delimiter used in the data file (*'\t'*, *'\s'*, *','*).
+* **--x_axis** *<*name*>* Name of the x_axis, as it appears in the given file.
+* **--y_axis** *<*name*>* Name of the y_axis, as it appears in the given file.
+* **--group** *<*name*>* Name of the grouping column, as it appears in the given file.
+* **--association_var** *<*name*>* Name of the column that determines direction of effect. Direction of effect not shown, if this arg is not specified.
 * **--neg** Setting this flag plots a Bonferonni threshold line for negative direction of effect.
-* **--hover_data** (<column_name> <displayed_name> <sig_figs> <scientific_notation>)+ Specify what is displayed when hovering over a datapoint in the interactive visualization. Takes a multiple of four arguments, in the order specified here. sig_figs are specified with an integer, or an *n* if you wish to not set them. Scientific notation is set with a *y* or *n*.
-* **--title** <title> Title of the plot.
-* **--width** <width> Width of the figure.
-* **--height** <height> Height of the figure.
-* **--marker_size** <size> Size of data point markers (1 - 30).
+* **--hover_data** (*<*column_name*>* *<*displayed_name*>* *<*sig_figs*>* *<*scientific_notation*>*)+ Specify what is displayed when hovering over a datapoint in the interactive visualization. Takes a multiple of four arguments, in the order specified here. sig_figs are specified with an integer, or an *n* if you wish to not set them. Scientific notation is set with a *y* or *n*.
+* **--title** *<*title*>* Title of the plot.
+* **--width** *<*width*>* Width of the figure.
+* **--height** *<*height*>* Height of the figure.
+* **--marker_size** *<*size*>* Size of data point markers (1 - 30).
 * **--crowded_origin** If the flag is set, the black border around data points is replaced with a grey one.
 * **--show_legend** If the flag is set, the legend for the plot is added on the right side of the figure.
-* **--output_path** <path> The path to the directory including the file name (without format extension), where the output file should be wrtitten.
-* **--output_format** (<format>)+ All formats in which the figure should be saved. Allowed values are: *studio*, *html*, *png*, *jpg*, *svg*, *pdf*, *json*.
-* **--ancol** <name> If the input file contains a column that determines whether a data point is significant, specify this argument. If not specified, Bonferonni significance test will be performed on the dataset.
-* **--anvar** <name> Name of column used to annotate significant points.
-* **--anlim** <limit> The maximum number of annotations per figure. If not specified, unlimited annotationspermitted.
+* **--output_path** *<*path*>* The path to the directory including the file name (without format extension), where the output file should be wrtitten.
+* **--output_format** (*<*format*>*)+ All formats in which the figure should be saved. Allowed values are: *studio*, *html*, *png*, *jpg*, *svg*, *pdf*, *json*.
+* **--ancol** *<*name*>* If the input file contains a column that determines whether a data point is significant, specify this argument. If not specified, Bonferonni significance test will be performed on the dataset.
+* **--anvar** *<*name*>* Name of column used to annotate significant points.
+* **--anlim** *<*limit*>* The maximum number of annotations per figure. If not specified, unlimited annotationspermitted.
 
