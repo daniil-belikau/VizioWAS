@@ -45,12 +45,12 @@ $ python3 createViz.py \
 --anvar 'description'
 ```
 
-### Legal Arguments
+### Argument Specification
 
 The following is the list of available command line arguments (make sure to enclose multi-word arguments in quotation marks):
 * **--vis_type** *<*type*>* Type of summary stats being visualized. Can be *lab* or *phenome*.
 * **--input_path** *<*path*>* Path to file containing summary stat data (tested with .txt and .csv files).
-* **--separation_strategy** *<*strat*>* Specify the delimiter used in the data file (*'\t'*, *'\s'*, *','*).
+* **--separation_strategy** *<*strat*>* Specify the delimiter used in the data file ('\t', '\s', ',').
 * **--x_axis** *<*name*>* Name of the x_axis, as it appears in the given file.
 * **--y_axis** *<*name*>* Name of the y_axis, as it appears in the given file.
 * **--group** *<*name*>* Name of the grouping column, as it appears in the given file.
@@ -68,4 +68,22 @@ The following is the list of available command line arguments (make sure to encl
 * **--ancol** *<*name*>* If the input file contains a column that determines whether a data point is significant, specify this argument. If not specified, Bonferonni significance test will be performed on the dataset.
 * **--anvar** *<*name*>* Name of column used to annotate significant points.
 * **--anlim** *<*limit*>* The maximum number of annotations per figure. If not specified, unlimited annotationspermitted.
+
+### Editing figures
+
+If the automatically generated figures are not satisfactory (e.g. overlapping annotations), they can be edited manually. Note however, that this requires making your **figure public**. To edit figures manually:
+
+1) Specify **--output_format** to be *studio*.
+
+2) Locate the html file generated from that script call and open it.
+
+3) On the upper right hand corner of the figure, find and press the *edit in chart studio* button (icon showing a floppy disk).
+
+4) A new tab with an online editing studio will be opened, containing the figure. Most aspects of the figure can be edited here in a visual and interactive way, inlcuding annotation placement.
+
+5) Once all the edits are done, the figure needs to be saved. Click the blue *Save* button on the left sidebar.
+
+6) Name the plot, and set the privacy selector to **Public**, then press *Save*.
+
+7) To export the edited figure, click *Export* on the left sidebar, and choose *Image* for static plot or *HTML* for an interactive plot. When creating a static plot, to ensure that it is high quality, adjust the scale factor to *2x* or *3x*.
 
