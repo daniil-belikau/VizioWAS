@@ -10,17 +10,19 @@ def run(args):
 
     hover_data = plot.assemble_hover_data(args.hover_data)
 
-    if args.neg:
-        lines = [(args.pos, 'red'), (-int(args.neg), 'red'), (0, 'lightgrey')]
-    else:
-        lines = [(args.pos, 'red'), (0, 'lightgrey')]
+    bonferroni_threshold = data.bonferroni(df, args.y_axis)
         
     if args.ancol:
         manual = False
         threshold = args.ancol
     else: 
         manual = True
-        threshold = args.anthr 
+        threshold = bonferroni_threshold
+    
+    if args.neg:
+        lines = [(bonferroni_threshold, 'red'), (-bonferroni_threshold, 'red'), (0, 'lightgrey')]
+    else:
+        lines = [(bonferroni_threshold, 'red'), (0, 'lightgrey')]
         
     annotations = data.create_annotations(df, args.x_axis, args.y_axis, args.anvar, threshold, args.anlim, manual)
     

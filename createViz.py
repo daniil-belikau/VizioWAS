@@ -25,7 +25,10 @@ if __name__ == "__main__":
     
     # significance threshold line
     # need only pos if no direction of effect
+
+    # No longer used
     parser.add_argument('--pos', help='Significant -log10(p) for threshold line (positive).', type=float)
+    # Used now to determine if negative threshold line should plotted
     parser.add_argument('--neg', help='Significant -log10(p) for threshold line (negative).', type=float)
 
     # hover data: col_name, col_title, sig_digs, scientific notation
@@ -52,7 +55,6 @@ if __name__ == "__main__":
     # annotations
     # check if annotation limit exists
     # put anthr and ancol in mutually exclusive group
-    parser.add_argument('--anthr', help='Manual -log10(p) value for annotation threshold.', type=str)
     parser.add_argument('--ancol', help='Name of column used to determine if data point is annotated.', type=str)
     parser.add_argument('--anvar', help='Name of column used to annotate significant data points.', type=str)
     parser.add_argument('--anlim', help='Maximum number of annotations per figure.', type=int)
