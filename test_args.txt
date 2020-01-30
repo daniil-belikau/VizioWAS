@@ -6,7 +6,23 @@ python3 createViz.py --vis_type lab --input_path '../1203_labwas/data/CAD_premed
 
 
 
-python3 createViz.py --vis_type phenome --input_path '../codemin1_phewas/data/codemin1_control_exclusions_F_pre_2019-11-04_cov_min_case_25.txt' --separation_strategy '\t' --x_axis phecode --y_axis p --group group --association_var or --hover_data phecode 'Phecode' n n description 'Description' n n p 'P-value' 3 y lci "Lower Confidence Interval" 3 n uci "Upper Confidence Interval" 3 n or "Odds Ratio" 3 n --title 'codemin1_control_exclusions_F_pre_2019-11-04_cov_min_case_25 PheWAS' --width 900 --height 600 --marker_size 14 --show_legend --output_path '../codemin1_phewas/output/codemin1_control_exclusions_F_pre_2019-11-04_cov_min_case_25' --output_formats 'studio' --anvar 'description'
+python3 createViz.py 
+--vis_type phenome 
+--input_path '../codemin1_phewas/data/codemin1_control_exclusions_F_pre_2019-11-04_cov_min_case_25.txt' 
+--separation_strategy '\t' 
+--x_axis phecode 
+--y_axis p 
+--group group 
+--association_var or 
+--hover_data phecode 'Phecode' n n description 'Description' n n p 'P-value' 3 y lci "Lower Confidence Interval" 3 n uci "Upper Confidence Interval" 3 n or "Odds Ratio" 3 n 
+--title 'codemin1_control_exclusions_F_pre_2019-11-04_cov_min_case_25 PheWAS' 
+--width 900 
+--height 600 
+--marker_size 14 
+--show_legend 
+--output_path '../codemin1_phewas/output/codemin1_control_exclusions_F_pre_2019-11-04_cov_min_case_25' 
+--output_formats 'studio' 
+--anvar 'description'
 
 python3 createViz.py --vis_type phenome --input_path '../codemin1_phewas/data/codemin1_control_exclusions_F_pre180_2019-11-04_cov_min_case_25_female.txt' --separation_strategy '\t' --x_axis phecode --y_axis p --group group --association_var or --hover_data phecode 'Phecode' n n description 'Description' n n p 'P-value' 3 y lci "Lower Confidence Interval" 3 n uci "Upper Confidence Interval" 3 n or "Odds Ratio" 3 n --title 'codemin1_control_exclusions_F_pre180_2019-11-04_cov_min_case_25_female PheWAS' --width 900 --height 600 --marker_size 14 --show_legend --output_path '../codemin1_phewas/output/codemin1_control_exclusions_F_pre180_2019-11-04_cov_min_case_25_female' --output_formats 'studio' --anvar 'description'
 
