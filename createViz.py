@@ -40,6 +40,8 @@ if __name__ == "__main__":
     # figure setup
     # use some args as flags instead of expectign a value
     parser.add_argument('--title', help='Title of the figure being produced.', type=str)
+    parser.add_argument('--x_title', help='Title of the x_axis.', type=str)
+    parser.add_argument('--y_title', help='Title of the y_axis.', type=str)
     parser.add_argument('--width', help='Width of the figure.', type=int)
     parser.add_argument('--height', help='Height of the figure.', type=int)
     parser.add_argument('--marker_size', help='Size of data points on the figure (1-20).', type=int)

@@ -58,6 +58,8 @@ The following is the list of available command line arguments (make sure to encl
 * **--neg** Setting this flag plots a Bonferonni threshold line for negative direction of effect.
 * **--hover_data** (*<*column_name*>* *<*displayed_name*>* *<*sig_figs*>* *<*scientific_notation*>*)+ Specify what is displayed when hovering over a datapoint in the interactive visualization. Takes a multiple of four arguments, in the order specified here. sig_figs are specified with an integer, or an *n* if you wish to not set them. Scientific notation is set with a *y* or *n*.
 * **--title** *<*title*>* Title of the plot.
+* **--x_title** *<*title*>* Title of the x_axis.
+* **--y_title** *<*title*>* Title of the y_axis.
 * **--width** *<*width*>* Width of the figure.
 * **--height** *<*height*>* Height of the figure.
 * **--marker_size** *<*size*>* Size of data point markers (1 - 30).

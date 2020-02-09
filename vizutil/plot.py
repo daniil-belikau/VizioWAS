@@ -67,11 +67,11 @@ def customize_markers(fig, unique_groups, group, hover_template, marker_size, cr
     return fig
 
 
-def customize_layout(fig, title, annotations, x_axis, show_legend, x_max, lines=[], corr_dir=True, tick_labels=False):
+def customize_layout(fig, title, annotations, x_axis, show_legend, x_max, x_title, y_title, lines=[], corr_dir=True, tick_labels=False):
     layout = {
         'title_text' : title,
-        'yaxis' : go.layout.YAxis(automargin=True, linecolor='black', showgrid=False, zeroline=False, title='-log10(p) x Direction of Effect'),
-        'xaxis' : go.layout.XAxis(automargin=True, linecolor='black', showgrid=False, zeroline=False, title=x_axis, showticklabels=tick_labels),
+        'yaxis' : go.layout.YAxis(automargin=True, linecolor='black', showgrid=False, zeroline=False, title=y_title),
+        'xaxis' : go.layout.XAxis(automargin=True, linecolor='black', showgrid=False, zeroline=False, title=x_title, showticklabels=tick_labels),
         'showlegend' : show_legend,
         'legend' : go.layout.Legend(font = {'size' : 10}, itemclick='toggleothers', itemdoubleclick='toggle', tracegroupgap=1, orientation='v'),
         'annotations' : annotations

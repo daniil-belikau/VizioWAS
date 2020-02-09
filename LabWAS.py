@@ -28,8 +28,11 @@ def run(args):
     
     df = data.transform_hover_data(df, hover_data[2])
 
+    x_title = args.x_title if args.x_title else args.x_axis
+    y_title = args.y_title if args.y_title else '-log10(p) x Direction of Effect'
+
     fig = plot.produce_figure(df, args.x_axis, args.group, hover_data[0])
     fig = plot.customize_markers(fig, df[args.group].unique(), args.group, hover_data[1], args.marker_size, args.crowded_origin)
-    fig = plot.customize_layout(fig, args.title, annotations, args.x_axis, args.show_legend, len(df.index), lines, args.association_var)
+    fig = plot.customize_layout(fig, args.title, annotations, args.x_axis, args.show_legend, len(df.index), x_title, y_title, lines, args.association_var, x_title, y_title)
     
     plot.export_plot(fig, args.output_path, args.output_formats, args.width, args.height)
