@@ -50,7 +50,7 @@ def produce_figure(df, x_axis, group, hover_data):
         return px.scatter(df, x=x_axis, y='y', color=group, template='plotly_white')
 
 
-def customize_markers(fig, unique_groups, group, hover_template, marker_size, crowded_origin):
+def customize_markers(fig, unique_groups, group, hover_data, marker_size, crowded_origin):
     for gr in unique_groups:
         trace = fig.select_traces(selector={'legendgroup' : f'{group}={gr}'})
         color_hex = next(trace).marker.color.lstrip('#')
