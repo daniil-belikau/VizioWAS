@@ -1,6 +1,6 @@
 import argparse
 
-import LabWAS
+import OmeWAS
 import PheWAS
 
 
@@ -39,20 +39,20 @@ if __name__ == "__main__":
 
     # figure setup
     # use some args as flags instead of expectign a value
-    parser.add_argument('--title', help='Title of the figure being produced.', type=str)
+    parser.add_argument('--title', default='ViziOWAS Figure', help='Title of the figure being produced.', type=str)
     parser.add_argument('--x_title', help='Title of the x_axis.', type=str)
     parser.add_argument('--y_title', help='Title of the y_axis.', type=str)
-    parser.add_argument('--width', help='Width of the figure.', type=int)
-    parser.add_argument('--height', help='Height of the figure.', type=int)
-    parser.add_argument('--marker_size', help='Size of data points on the figure (1-20).', type=int)
+    parser.add_argument('--width', default=900, help='Width of the figure.', type=int)
+    parser.add_argument('--height', default=600, help='Height of the figure.', type=int)
+    parser.add_argument('--marker_size', default=12, help='Size of data points on the figure (1-20).', type=int)
     parser.add_argument('--crowded_origin', action='store_true', help='Set flag to improve visualization of crowded origin.')
     parser.add_argument('--show_legend', action='store_true', help='Would you like to show the legend on the figure.')
 
     # export
     # if output_path not set, create default output directory and output there
     # if editable, don't output anything else
-    parser.add_argument('--output_path', help='Path for plot output. Include file name, but do NOT include the file extension. ', type=str)
-    parser.add_argument('--output_formats', nargs='+', help='Type of file to export the plot in.', type=str)
+    parser.add_argument('--output_path', default='./viziowas_figure', help='Path for plot output. Include file name, but do NOT include the file extension. ', type=str)
+    parser.add_argument('--output_formats', default='studio', nargs='+', help='Type of file to export the plot in.', type=str)
 
     # annotations
     # check if annotation limit exists
@@ -64,9 +64,9 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     
-    if args.vis_type == 'lab':
-        LabWAS.run(args)
-
-    elif args.vis_type == 'phenome':
-        PheWAS.run(args)
+    if args.vis_type and args.input_path and args.separation_strategy and args.x_axis and args.y_axis and args.group:
+        OmeWAS.run(args)
+    else:
+        print("Specify the required arguments:")
+        print("vis_type, input_path, separation_strategy, x_axis, y_axis, group, ancol")
     
