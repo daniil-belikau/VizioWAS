@@ -1,7 +1,6 @@
 import argparse
 
 import OmeWAS
-import PheWAS
 
 
 if __name__ == "__main__":
