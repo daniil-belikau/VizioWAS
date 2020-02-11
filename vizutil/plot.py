@@ -5,7 +5,7 @@ import os
 
 
 # can export html with toImageButton toggled to produce static plots after adjusting annotations
-def output_plot_file(figure, path, output_format, width=900, height=600):
+def output_plot_file(figure, path, output_format, width, height):
     if 'studio' in output_format:
         pio.write_html(figure, file = path+'.html', config={
             'editable':True, 
@@ -43,8 +43,11 @@ def assemble_hover_data(hover_pref):
     return hover_cols, hover_str, hover_cols_transformations
 
 
-def produce_figure(df, x_axis, group, hover_cols):
-    return px.scatter(df, x=x_axis, y='y', color=group, hover_data=hover_cols, template='plotly_white')
+def produce_figure(df, x_axis, group, hover_data):
+    if hover_data:
+        return px.scatter(df, x=x_axis, y='y', color=group, hover_data=hover_data[0], template='plotly_white')
+    else:
+        return px.scatter(df, x=x_axis, y='y', color=group, template='plotly_white')
 
 
 def customize_markers(fig, unique_groups, group, hover_template, marker_size, crowded_origin):
@@ -56,18 +59,18 @@ def customize_markers(fig, unique_groups, group, hover_template, marker_size, cr
             color = {'color' : f'rgba{color_rgba}', 'line' : {'color' : 'lightgrey', 'width' : 1}, 'size' : marker_size}
         else:
             color = {'color' : f'rgba{color_rgba}', 'line' : {'color' : 'black', 'width' : 2}, 'size' : marker_size}
-        fig.update_traces(patch={
-            'hovertemplate' : hover_template,
+        patch = {
             'legendgroup' : gr,
             'name' : gr,
             'marker' : color
-        }, selector={
-            'legendgroup' : f'{group}={gr}'
-        })
+        }
+        if hover_data:
+            patch['hovertemplate'] = hover_data[1]
+        fig.update_traces(patch=patch, selector={'legendgroup' : f'{group}={gr}'})
     return fig
 
 
-def customize_layout(fig, title, annotations, x_axis, show_legend, x_max, x_title, y_title, lines=[], corr_dir=True, tick_labels=False):
+def customize_layout(fig, title, annotations, x_axis, show_legend, x_max, x_title, y_title, lines=[], tick_labels=False):
     layout = {
         'title_text' : title,
         'yaxis' : go.layout.YAxis(automargin=True, linecolor='black', showgrid=False, zeroline=False, title=y_title),
