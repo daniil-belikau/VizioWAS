@@ -15,7 +15,7 @@ def run(args):
     lines = [(bonferroni_threshold, 'red'), (-bonferroni_threshold, 'red'), (0, 'lightgrey')] if args.neg else [(bonferroni_threshold, 'red'), (0, 'lightgrey')]    
     annotations = data.create_annotations(df, args.x_axis, args.y_axis, args.anvar, threshold, args.anlim, manual)
     
-    df = data.transform_hover_data(df, hover_data[2]) if hover_data
+    if hover_data: df = data.transform_hover_data(df, hover_data[2])
 
     x_title = args.x_title if args.x_title else args.x_axis
     y_title = args.y_title if args.y_title else '-log10(p) x Direction of Effect'

@@ -14,12 +14,12 @@ Written for use with [Python 3.7](https://www.python.org/), and the following pa
 
 1) Install all prerequisite packages.
 
-2) Clone the repository
+2) Clone the repository.
 ```bash
 $ git clone https://github.com/daniil-belikau/ViziOWAS.git
 ```
 
-3) Change working directory to ViziOWAS
+3) Change working directory to ViziOWAS.
 ```bash
 $ cd ViziOWAS
 ```
@@ -89,3 +89,14 @@ If the automatically generated figures are not satisfactory (e.g. overlapping an
 
 7) To export the edited figure, click *Export* on the left sidebar, and choose *Image* for static plot or *HTML* for an interactive plot. When creating a static plot, to ensure that it is high quality, adjust the scale factor to *2x* or *3x*.
 
+### Example
+
+You can try using ViziOWAS with the sample data and arguments provided in the *Example* directory:
+
+1) Open a command-line window and navigate to the ViziOWAS directory.
+
+2) Open the *test_args.txt* file inside the *Example* directory and copy one of the two sample calls (starting with python3 and ending with an empty line).
+
+3) Paste the text into your command-line window and run.
+
+4) You can find the output figures in the *Example/Output* directory. The input data can be found in the *Example/Data* directory.

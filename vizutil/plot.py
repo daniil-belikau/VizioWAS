@@ -33,7 +33,6 @@ def output_plot_file(figure, path, output_format, width, height):
 
 def assemble_hover_data(hover_pref):
     hover_cols = [hover_pref[i] for i in range(0, len(hover_pref), 4)]
-    # Make sure that the check catches all cases
     hover_cols_transformations = [(hover_pref[i], int(hover_pref[i+2]), hover_pref[i+3]=='y') for i in range(0, len(hover_pref), 4) if not hover_pref[i+2] == 'n']
     
     list_length = len(hover_pref)/4
@@ -64,8 +63,8 @@ def customize_markers(fig, unique_groups, group, hover_data, marker_size, crowde
             'name' : gr,
             'marker' : color
         }
-        patch['hovertemplate'] = hover_data[1] if hover_data
-        
+        if hover_data: patch['hovertemplate'] = hover_data[1]
+
         fig.update_traces(patch=patch, selector={'legendgroup' : f'{group}={gr}'})
     return fig
 
@@ -79,11 +78,6 @@ def customize_layout(fig, title, annotations, x_axis, show_legend, x_max, x_titl
         'legend' : go.layout.Legend(font = {'size' : 10}, itemclick='toggleothers', itemdoubleclick='toggle', tracegroupgap=1, orientation='v'),
         'annotations' : annotations
     }
-    
-    # if tick_labels:
-        # layout['xaxis'] = go.layout.XAxis(automargin=True, linecolor='black', showgrid=False, title=x_axis, showticklabels=True, 
-        #                                 tickangle=60, ticktext=tick_labels[0], tickvals=tick_labels[1], tickfont = go.layout.xaxis.Tickfont(size = 10))
-
     layout['shapes'] = [go.layout.Shape(type='line', x0=0, x1=x_max, y0=l[0], y1=l[0], line={'color':l[1], 'width':2}, layer='below') for l in lines]
     fig.update_layout(layout)
     return fig
@@ -98,8 +92,6 @@ def preview_figure(fig):
         'showSendToCloud' : True})
 
 
-# if no directory specified, add default directory
 def export_plot(fig, path, formats, width, height):
-    # os.mkdir('plot_output')
     for f in formats:
         output_plot_file(fig, path, f, width, height)

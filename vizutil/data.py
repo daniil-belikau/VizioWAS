@@ -4,7 +4,6 @@ import plotly.graph_objects as go
 import math
 
 
-# Extend the number of states: if annotation on same side, rotate slowly then alternate angle between last two states, if flipped sides, start with state 0 again
 def determine_offset(state, y_positive):
     if state == 0:
         return (-25, -4, 1) if y_positive else (-25, 4, 1)
@@ -14,7 +13,6 @@ def determine_offset(state, y_positive):
         return (25, -4, 0) if y_positive else (25, 4, 0)
 
 
-# Pass shuffle = true for figs where, x_axis is non-numeric
 def data_import(data_path, separation_strategy, shuffle=False):
     try:
         df = pd.read_csv(data_path, sep=separation_strategy)
@@ -24,7 +22,6 @@ def data_import(data_path, separation_strategy, shuffle=False):
         sys.exit()
 
 
-# Pass array of names of mandatory columns as strings
 def data_clean(df, mandatory, y_axis):
     df.dropna(axis=0, subset=mandatory, inplace=True)
     df.dropna(axis=1, how='all', inplace=True)
@@ -33,10 +30,8 @@ def data_clean(df, mandatory, y_axis):
         sys.exit()
     return df
 
-
     # Possible mechanism to fix this
-    # y_value_min = df[df[y_axis] != 0].min()[y_axis]
-    # df[y_axis] = df[df[y_axis].isna() == False][y_axis].apply(lambda y: y if y != 0 else y_value_min)
+    # df[y_axis] = df[df[y_axis].isna() == False][y_axis].apply(lambda y: y if y != 0 else sys.float_info.min)
 
 
 def format_yaxis(df, y_axis, association_var):
@@ -64,7 +59,6 @@ def place_x_ticks(df, group, numeric, x_axis=''):
         prev = 0
         for key in tick_dict.keys():
             tick_dict[key] += prev
-            # add group name and tickloc as tuple
             tick_labels.append((str(key), (prev + tick_dict[key])/2))
             prev = tick_dict[key]
     return tick_labels
@@ -74,7 +68,7 @@ def create_annotations(df, x_axis, y_axis, annotation_col, threshold, limit, man
     annotations = []
     above_thresh = df[(df['y'] >= threshold) | (df['y'] <= -threshold)] if manual else df[df[threshold] == True]
     above_sorted = above_thresh.sort_values(by=[y_axis], ascending=True)
-    above_sorted = above_sorted.iloc[:limit] if limit
+    if limit: above_sorted = above_sorted.iloc[:limit]
     state = 0
     for index in range(len(above_sorted.index)):
         annot = above_sorted.iloc[index]
@@ -100,7 +94,6 @@ def bonferroni(df, y_axis):
     return threshold
 
 
-# modifies crucial columns, so must happen last. Create new column?
 def transform_hover_data(df, transformations):
     for tupl in transformations:
         if tupl[2]:
