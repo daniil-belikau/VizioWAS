@@ -53,19 +53,19 @@ def produce_figure(df, x_axis, group, hover_data):
 def customize_markers(fig, unique_groups, group, hover_data, marker_size, crowded_origin):
     for gr in unique_groups:
         trace = fig.select_traces(selector={'legendgroup' : f'{group}={gr}'})
+
         color_hex = next(trace).marker.color.lstrip('#')
         color_rgba = tuple([int(color_hex[i:i+2], 16) if i != 1 else 0.5 for i in (0,2,4,1)])
-        if crowded_origin:
-            color = {'color' : f'rgba{color_rgba}', 'line' : {'color' : 'lightgrey', 'width' : 1}, 'size' : marker_size}
-        else:
-            color = {'color' : f'rgba{color_rgba}', 'line' : {'color' : 'black', 'width' : 2}, 'size' : marker_size}
+        color = {'color' : f'rgba{color_rgba}', 'line' : {'color' : 'lightgrey', 'width' : 1}, 'size' : marker_size}
+        color['line'] = {'color' : 'lightgrey', 'width' : 1} if crowded_origin else {'color' : 'black', 'width' : 2}
+
         patch = {
             'legendgroup' : gr,
             'name' : gr,
             'marker' : color
         }
-        if hover_data:
-            patch['hovertemplate'] = hover_data[1]
+        patch['hovertemplate'] = hover_data[1] if hover_data
+        
         fig.update_traces(patch=patch, selector={'legendgroup' : f'{group}={gr}'})
     return fig
 

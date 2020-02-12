@@ -7,26 +7,18 @@ def run(args):
     df = data.data_clean(df, [args.x_axis, args.y_axis, args.group], args.y_axis)
     df = data.format_yaxis(df, args.y_axis, args.association_var)
 
+# store hover_data in tuple (hover_cols, hover_str, hover_cols_transformations)
     hover_data = plot.assemble_hover_data(args.hover_data) if args.hover_data else None
 
     bonferroni_threshold = data.bonferroni(df, args.y_axis)
-        
-    if args.ancol:
-        manual = False
-        threshold = args.ancol
-    else: 
-        manual = True
-        threshold = bonferroni_threshold
+    manual, threshold = False, args.ancol if args.ancol else True, bonferroni_threshold
     
-    if args.neg:
-        lines = [(bonferroni_threshold, 'red'), (-bonferroni_threshold, 'red'), (0, 'lightgrey')]
-    else:
-        lines = [(bonferroni_threshold, 'red'), (0, 'lightgrey')]
+# build significance threshold lines
+    lines = [(bonferroni_threshold, 'red'), (-bonferroni_threshold, 'red'), (0, 'lightgrey')] if args.neg else [(bonferroni_threshold, 'red'), (0, 'lightgrey')]
         
     annotations = data.create_annotations(df, args.x_axis, args.y_axis, args.anvar, threshold, args.anlim, manual)
     
-    if hover_data:
-        df = data.transform_hover_data(df, hover_data[2])
+    df = data.transform_hover_data(df, hover_data[2]) if hover_data
 
     x_title = args.x_title if args.x_title else args.x_axis
     y_title = args.y_title if args.y_title else '-log10(p) x Direction of Effect'

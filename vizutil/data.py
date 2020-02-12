@@ -7,30 +7,18 @@ import math
 # Extend the number of states: if annotation on same side, rotate slowly then alternate angle between last two states, if flipped sides, start with state 0 again
 def determine_offset(state, y_positive):
     if state == 0:
-        if y_positive:
-            return (-25, -4, 1)
-        else:
-            return (-25, 4, 1)
+        return (-25, -4, 1) if y_positive else (-25, 4, 1)
     elif state == 1:
-        if y_positive:
-            return (0, -15, 2)
-        else:
-            return (0, 15, 2)
+        return (0, -15, 2) if y_positive else (0, 15, 2)
     elif state == 2:
-        if y_positive:
-            return (25, -4, 0)
-        else:
-            return (25, 4, 0)
+        return (25, -4, 0) if y_positive else (25, 4, 0)
 
 
 # Pass shuffle = true for figs where, x_axis is non-numeric
 def data_import(data_path, separation_strategy, shuffle=False):
     try:
         df = pd.read_csv(data_path, sep=separation_strategy)
-        if shuffle:
-            return df.sample(frac=1).reset_index(drop=True)
-        else:
-            return df
+        return df.sample(frac=1).reset_index(drop=True) if shuffle else df
     except:
         print('Unable to import data. Check that the file path and separation strategy are correct!')
         sys.exit()
@@ -84,13 +72,9 @@ def place_x_ticks(df, group, numeric, x_axis=''):
 
 def create_annotations(df, x_axis, y_axis, annotation_col, threshold, limit, manual=False):
     annotations = []
-    if manual:
-        above_thresh = df[(df['y'] >= threshold) | (df['y'] <= -threshold)]
-    else:
-        above_thresh = df[df[threshold] == True]
+    above_thresh = df[(df['y'] >= threshold) | (df['y'] <= -threshold)] if manual else df[df[threshold] == True]
     above_sorted = above_thresh.sort_values(by=[y_axis], ascending=True)
-    if limit:
-        above_sorted = above_sorted.iloc[:limit]
+    above_sorted = above_sorted.iloc[:limit] if limit
     state = 0
     for index in range(len(above_sorted.index)):
         annot = above_sorted.iloc[index]
