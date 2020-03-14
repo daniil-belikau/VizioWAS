@@ -31,7 +31,7 @@ if __name__ == "__main__":
     parser.add_argument('--y_title', help='Title of the y_axis.', type=str)
     parser.add_argument('--width', default=900, help='Width of the figure.', type=int)
     parser.add_argument('--height', default=600, help='Height of the figure.', type=int)
-    parser.add_argument('--marker_size', default=14, help='Size of data points on the figure (1-20).', type=int)
+    parser.add_argument('--marker_size', default=14, help='Size of data points on the figure (1-30).', type=int)
     parser.add_argument('--crowded_origin', action='store_true', help='Set flag to improve visualization of crowded origin.')
     parser.add_argument('--show_legend', action='store_true', help='Would you like to show the legend on the figure.')
 

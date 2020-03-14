@@ -67,9 +67,18 @@ The following is the list of available command line arguments (make sure to encl
 * **--show_legend** If the flag is set, the legend for the plot is added on the right side of the figure.
 * **--output_path** *<*path*>* The path to the directory including the file name (without format extension), where the output file should be wrtitten.
 * **--output_format** (*<*format*>*)+ All formats in which the figure should be saved. Allowed values are: *studio*, *html*, *png*, *jpg*, *svg*, *pdf*, *json*.
-* **--ancol** *<*name*>* If the input file contains a column that determines whether a data point is significant, specify this argument. If not specified, Bonferonni significance test will be performed on the dataset.
+* **--ancol** *<*name*>* If the input file contains a column that determines whether a data point is significant, specify this argument. If not specified, Bonferonni corrected p-values will be used.
 * **--anvar** *<*name*>* Name of column used to annotate significant points.
 * **--anlim** *<*limit*>* The maximum number of annotations per figure. If not specified, unlimited annotationspermitted.
+
+#### Required Arguments:
+
+* **--vis_type**
+* **--input_path**
+* **--separation_strategy**
+* **--x_axis**
+* **--y_axis**
+* **--group**
 
 ### Editing figures
 

@@ -21,11 +21,12 @@ def data_import(data_path, separation_strategy, shuffle=False):
         print('Unable to import data. Check that the file path and separation strategy are correct!')
         sys.exit()
 
-
+# Write file detailing which data had been removed or modified
 def data_clean(df, mandatory, y_axis):
     df.dropna(axis=0, subset=mandatory, inplace=True)
     df.dropna(axis=1, how='all', inplace=True)
     if len(df[df[y_axis] == 0].index) > 0:
+        # Replace with min float value instead?
         print('Please make sure there are no P-values equal to 0 in your data.')
         sys.exit()
     return df
