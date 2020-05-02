@@ -6,10 +6,13 @@ import os
 
 # can export html with toImageButton toggled to produce static plots after adjusting annotations
 def output_plot_file(figure, path, output_format, width, height):
+    server_config = {'plotlyServerURL': 'https://chart-studio.plotly.com', 'showLink':True}
     if 'studio' in output_format:
         pio.write_html(figure, file = path+'.html', config={
             'editable':True, 
             'displaylogo' : False, 
+            'plotlyServerURL': 'https://chart-studio.plotly.com', 
+            'showLink':True,
             'showSendToCloud' : True,
             'toImageButtonOptions': {
                 'format' : 'png',
@@ -18,7 +21,7 @@ def output_plot_file(figure, path, output_format, width, height):
                 'scale'  : 6
             }})
     elif 'html' in output_format:
-        pio.write_html(figure, file = path+'.html')
+        pio.write_html(figure, file = path+'.html', config=server_config)
     elif 'png' in output_format:
         pio.write_image(figure, file = path+'.png', format='png', width=width, height=height, scale=6)
     elif 'jpg' in output_format:
@@ -51,22 +54,34 @@ def produce_figure(df, x_axis, group, hover_data):
 
 def customize_markers(fig, unique_groups, group, hover_data, marker_size, crowded_origin):
     for gr in unique_groups:
-        trace = fig.select_traces(selector={'legendgroup' : f'{group}={gr}'})
+        try:
+            customize_markers_helper(fig, f'{gr}', marker_size, crowded_origin, gr, hover_data)
+        except:
+            customize_markers_helper(fig, f'{group}={gr}', marker_size, crowded_origin, gr, hover_data)
 
-        color_hex = next(trace).marker.color.lstrip('#')
-        color_rgba = tuple([int(color_hex[i:i+2], 16) if i != 1 else 0.5 for i in (0,2,4,1)])
-        color = {'color' : f'rgba{color_rgba}', 'line' : {'color' : 'lightgrey', 'width' : 1}, 'size' : marker_size}
-        color['line'] = {'color' : 'lightgrey', 'width' : 1} if crowded_origin else {'color' : 'black', 'width' : 2}
-
-        patch = {
-            'legendgroup' : gr,
-            'name' : gr,
-            'marker' : color
-        }
-        if hover_data: patch['hovertemplate'] = hover_data[1]
-
-        fig.update_traces(patch=patch, selector={'legendgroup' : f'{group}={gr}'})
     return fig
+
+
+def customize_markers_helper(fig, selector_string, marker_size, crowded_origin, gr, hover_data):
+    trace = fig.select_traces(selector={'legendgroup' : selector_string})
+    patch = setup_custom_markers(trace, marker_size, crowded_origin, gr, hover_data)
+    fig.update_traces(patch=patch, selector={'legendgroup' : selector_string})
+
+
+def setup_custom_markers(trace, marker_size, crowded_origin, gr, hover_data):
+    color_hex = next(trace).marker.color.lstrip('#')
+    color_rgba = tuple([int(color_hex[i:i+2], 16) if i != 1 else 0.5 for i in (0,2,4,1)])
+    color = {'color' : f'rgba{color_rgba}', 'line' : {'color' : 'lightgrey', 'width' : 1}, 'size' : marker_size}
+    color['line'] = {'color' : 'lightgrey', 'width' : 1} if crowded_origin else {'color' : 'black', 'width' : 2}
+
+    patch = {
+        'legendgroup' : gr,
+        'name' : gr,
+        'marker' : color
+    }
+    if hover_data: patch['hovertemplate'] = hover_data[1]
+    
+    return patch
 
 
 def customize_layout(fig, title, annotations, x_axis, show_legend, x_max, x_title, y_title, lines=[], tick_labels=False):
