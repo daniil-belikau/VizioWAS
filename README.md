@@ -6,7 +6,7 @@ Tested in Mac and Linux environments.
 
 Written for use with [Python 3.7](https://www.python.org/), and the following packages used:
 * [pandas (*>*=0.24.2 recommended)](http://pandas.pydata.org/)
-* [plotly (*>*=4.1.1 recommded)](https://plot.ly/python/)
+* [plotly (*>*=4.6.0 recommded)](https://plot.ly/python/)
 
 ## Usage
 
@@ -82,11 +82,12 @@ The following is the list of available command line arguments (make sure to encl
 
 ### Editing figures
 
-If the automatically generated figures are not satisfactory (e.g. overlapping annotations), they can be edited manually. Note however, that this requires making your **figure public**. To edit figures manually:
+If the automatically generated figures are not satisfactory (e.g. overlapping annotations), they can be edited manually. Note however, that this requires **making your figure public**. To edit figures manually:
 
 1) Specify **--output_format** to be *studio*.
 
 2) Locate the html file generated from that script call and open it.
+   *If you only need a static image of the plot, once the file is opened, adjust the plot using the mouse. Then click the camera button on the upper right hand corner of the figure to get the modified plot image.*
 
 3) On the upper right hand corner of the figure, find and press the *edit in chart studio* button (icon showing a floppy disk).
 
