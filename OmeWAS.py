@@ -13,7 +13,7 @@ def run(args):
     bonferroni_threshold = data.bonferroni(df, args.y_axis)
     manual, threshold = (False, args.ancol) if args.ancol else (True, bonferroni_threshold)
     lines = [(bonferroni_threshold, 'red'), (-bonferroni_threshold, 'red'), (0, 'lightgrey')] if args.neg else [(bonferroni_threshold, 'red'), (0, 'lightgrey')]    
-    annotations = data.create_annotations(df, args.x_axis, args.y_axis, args.anvar, threshold, args.anlim, manual)
+    annotations = data.create_annotations(df, args.x_axis, args.y_axis, args.anvar, threshold, args.anlim, manual) if args.anvar else None
     
     if hover_data: df = data.transform_hover_data(df, hover_data[2])
 

@@ -90,9 +90,9 @@ def customize_layout(fig, title, annotations, x_axis, show_legend, x_max, x_titl
         'yaxis' : go.layout.YAxis(automargin=True, linecolor='black', showgrid=False, zeroline=False, title=y_title),
         'xaxis' : go.layout.XAxis(automargin=True, linecolor='black', showgrid=False, zeroline=False, title=x_title, showticklabels=tick_labels),
         'showlegend' : show_legend,
-        'legend' : go.layout.Legend(font = {'size' : 10}, itemclick='toggleothers', itemdoubleclick='toggle', tracegroupgap=1, orientation='v'),
-        'annotations' : annotations
+        'legend' : go.layout.Legend(font = {'size' : 10}, itemclick='toggleothers', itemdoubleclick='toggle', tracegroupgap=1, orientation='v')
     }
+    if annotations: layout["annotations"] = annotations
     layout['shapes'] = [go.layout.Shape(type='line', x0=0, x1=x_max, y0=l[0], y1=l[0], line={'color':l[1], 'width':2}, layer='below') for l in lines]
     fig.update_layout(layout)
     return fig
