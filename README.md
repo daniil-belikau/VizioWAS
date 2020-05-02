@@ -4,7 +4,7 @@ ViziOWAS is a command line based tool for creating interactive and static visual
 ## Prerequisites
 Tested in Mac and Linux environments.
 
-Written for use with [Python 3.7](https://www.python.org/), and the following packages used:
+Developed for use with [Python 3.7](https://www.python.org/), and the following packages used:
 * [pandas (*>*=0.24.2 recommended)](http://pandas.pydata.org/)
 * [plotly (*>*=4.6.0 recommded)](https://plot.ly/python/)
 
