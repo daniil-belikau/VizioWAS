@@ -87,7 +87,8 @@ If the automatically generated figures are not satisfactory (e.g. overlapping an
 1) Specify **--output_format** to be *studio*.
 
 2) Locate the html file generated from that script call and open it.
-   *If you only need a static image of the plot, once the file is opened, adjust the plot using the mouse. Then click the camera button on the upper right hand corner of the figure to get the modified plot image.*
+   
+   *If you only need a static image of the plot, once the file is opened, adjust the plot using the mouse. Then click the camera button on the upper right hand corner of the figure to get the modified plot image. Skip the rest of the instructions.*
 
 3) On the upper right hand corner of the figure, find and press the *edit in chart studio* button (icon showing a floppy disk).
 
