@@ -1,6 +1,6 @@
 import argparse
 
-import OmeWAS
+import ViziOWAS
 
 
 if __name__ == "__main__":
@@ -48,7 +48,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     if args.vis_type and args.input_path and args.separation_strategy and args.x_axis and args.y_axis and args.group:
-        OmeWAS.run(args)
+        ViziOWAS.run(args)
     else:
         print("Specify the required arguments:")
         print("vis_type, input_path, separation_strategy, x_axis, y_axis, group, ancol")
