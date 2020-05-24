@@ -1,7 +1,9 @@
 # ViziOWAS
 ViziOWAS is a command line based tool for creating interactive and static visualizations of PheWAS, LabWAS summary statistics.
 
+## Sample Output On A PheWAS Dataset
 ![Sample Output Image](https://github.com/daniil-belikau/ViziOWAS/blob/sample_image/codemin1_control_exclusions_F_pre_2019-11-04_cov_min_case_25.png?raw=true)
+[Click here for an interactive version of the plot](https://dennislabvisualizations.github.io/codemin1_control_exclusions_F_pre_2019-11-04_cov_min_case_25/)
 
 ## Prerequisites
 Tested in Mac and Linux environments.
