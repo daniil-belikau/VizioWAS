@@ -53,7 +53,7 @@ $ python3 createViz.py \
 
 The following is the list of available command line arguments (make sure to enclose multi-word arguments in quotation marks):
 * **--vis_type** *<*type*>* Type of summary stats being visualized. Can be *lab* or *phenome*.
-* **--input_path** *<*path*>* Path to file containing summary stat data (tested with .txt and .csv files).
+* **--input_path** *<*path*>* Path to file containing summary stat data (tested with .txt and .csv files). *Note: the file should not contain any pvalues that will be imported into python as 0.*
 * **--separation_strategy** *<*strat*>* Specify the delimiter used in the data file ('\t', '\s', ',').
 * **--x_axis** *<*name*>* Name of the x_axis, as it appears in the given file.
 * **--y_axis** *<*name*>* Name of the y_axis, as it appears in the given file.
@@ -115,3 +115,8 @@ You can try using ViziOWAS with the sample data and arguments provided in the *E
 3) Paste the text into your command-line window and run.
 
 4) You can find the output figures in the *Example/Output* directory. The input data can be found in the *Example/Data* directory.
+
+## Hosting
+
+If you plan to host your interactive visualizations, here is a guide to do it for free with GitHub Pages.
+
