@@ -118,5 +118,5 @@ You can try using ViziOWAS with the sample data and arguments provided in the *E
 
 ## Hosting
 
-If you plan to host your interactive visualizations, here is a guide to do it for free with GitHub Pages.
+If you plan to host your interactive visualizations, [here](https://github.com/daniil-belikau/ViziOWAS/blob/master/GHP%20Visualization%20Hosting%20Tutorial.pdf) is a guide to do it for free with GitHub Pages.
 
