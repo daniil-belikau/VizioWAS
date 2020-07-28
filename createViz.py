@@ -1,6 +1,6 @@
 import argparse
 
-import ViziOWAS
+import VizioWAS
 
 
 if __name__ == "__main__":
@@ -26,7 +26,7 @@ if __name__ == "__main__":
     parser.add_argument('--hover_data', nargs='+', help='List of columns and options to be displayed when hovering over a data point.', type=str)
 
 # figure setup
-    parser.add_argument('--title', default='ViziOWAS Figure', help='Title of the figure being produced.', type=str)
+    parser.add_argument('--title', default='VizioWAS Figure', help='Title of the figure being produced.', type=str)
     parser.add_argument('--x_title', help='Title of the x_axis.', type=str)
     parser.add_argument('--y_title', help='Title of the y_axis.', type=str)
     parser.add_argument('--width', default=900, help='Width of the figure.', type=int)
@@ -48,7 +48,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     if args.vis_type and args.input_path and args.separation_strategy and args.x_axis and args.y_axis and args.group:
-        ViziOWAS.run(args)
+        VizioWAS.run(args)
     else:
         print("Specify the required arguments:")
         print("vis_type, input_path, separation_strategy, x_axis, y_axis, group, ancol")
