@@ -1,8 +1,8 @@
-# ViziOWAS
-ViziOWAS is a command line based tool for creating interactive and static visualizations of PheWAS, LabWAS summary statistics.
+# VizioWAS
+VizioWAS is a command line based tool for creating interactive and static visualizations of PheWAS, LabWAS summary statistics.
 
 ## Sample Output On A PheWAS Dataset
-![Sample Output Image](https://github.com/daniil-belikau/ViziOWAS/blob/sample_image/codemin1_control_exclusions_F_pre_2019-11-04_cov_min_case_25.png?raw=true)
+![Sample Output Image](https://github.com/daniil-belikau/VizioWAS/blob/sample_image/codemin1_control_exclusions_F_pre_2019-11-04_cov_min_case_25.png?raw=true)
 [Click here for an interactive version of the plot.](https://dennislabvisualizations.github.io/codemin1_control_exclusions_F_pre_2019-11-04_cov_min_case_25/)
 
 ## Prerequisites
@@ -20,12 +20,12 @@ Developed for use with [Python 3.7](https://www.python.org/), and the following 
 
 2) Clone the repository.
 ```bash
-$ git clone https://github.com/daniil-belikau/ViziOWAS.git
+$ git clone https://github.com/daniil-belikau/VizioWAS.git
 ```
 
-3) Change working directory to ViziOWAS.
+3) Change working directory to VizioWAS.
 ```bash
-$ cd ViziOWAS
+$ cd VizioWAS
 ```
 
 4) Run script with appropriate options to produce visualization file(s).
@@ -106,9 +106,9 @@ If the automatically generated figures are not satisfactory (e.g. overlapping an
 
 ### Example
 
-You can try using ViziOWAS with the sample data and arguments provided in the *Example* directory:
+You can try using VizioWAS with the sample data and arguments provided in the *Example* directory:
 
-1) Open a command-line window and navigate to the ViziOWAS directory.
+1) Open a command-line window and navigate to the VizioWAS directory.
 
 2) Open the *test_args.txt* file inside the *Example* directory and copy one of the two sample calls (starting with python3 and ending with an empty line).
 
@@ -118,5 +118,5 @@ You can try using ViziOWAS with the sample data and arguments provided in the *E
 
 ## Hosting
 
-If you plan to host your interactive visualizations, [here](https://github.com/daniil-belikau/ViziOWAS/blob/master/GHP%20Visualization%20Hosting%20Tutorial.pdf) is a guide to do it for free with GitHub Pages.
+If you plan to host your interactive visualizations, [here](https://github.com/daniil-belikau/VizioWAS/blob/master/GHP%20Visualization%20Hosting%20Tutorial.pdf) is a guide to do it for free with GitHub Pages.
 
