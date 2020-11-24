@@ -1,5 +1,5 @@
 # VizioWAS
-ViziOWAS is a command line-based tool for creating interactive and static visualizations of your -omics association scan results (e.g., results from your phenome-wide association scan (PheWAS) or lab-wide association scan (LabWAS).
+ViziOWAS is a command line-based tool for creating interactive and static visualizations of your -omics association scan results (e.g., results from your phenome-wide association scan (PheWAS) or lab-wide association scan (LabWAS)).
 
 ## Sample Output On A PheWAS Dataset
 ![Sample Output Image](https://github.com/daniil-belikau/VizioWAS/blob/sample_image/codemin1_control_exclusions_F_pre_2019-11-04_cov_min_case_25.png?raw=true)
