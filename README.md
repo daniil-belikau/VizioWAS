@@ -12,7 +12,7 @@ Developed for use with [Python 3.7](https://www.python.org/), and the following 
 * [pandas (*>*=0.24.2 recommended)](http://pandas.pydata.org/)
 * [plotly (*>*=4.6.0 recommded)](https://plot.ly/python/)
 
-## Usage
+## Using VizioWAS
 
 ### Getting Started
 
